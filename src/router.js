@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Map from './components/Map.vue'
 import MySurvey from './components/Survey.vue'
+import Login from './components/Login.vue'
 
 Vue.use(Router)
 
@@ -24,6 +25,11 @@ export default new Router({
       path: '/survey',
       name: 'survey',
       component: MySurvey
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
     },
     {
       path: '/about',
