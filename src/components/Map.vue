@@ -1,27 +1,31 @@
 <template>
-  <l-map class='map' ref='map' :zoom='zoom' :center='center' >
-  </l-map>
+  <l-map class='map' ref='map' :zoom='zoom' :center='center' />
 </template>
 
 <script>
-import Layer from './Layer.vue';
+import Layer from '@/components/Layer.vue';
 import querystring from 'querystring';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { LMap, LTileLayer } from 'vue2-leaflet';
 import axios from 'axios';
 
-import jsonData from '../assets/layers.json';
+import jsonData from '@/assets/layers.json';
 
 function addLayer(layer, map) {
-  if (layer.type === 'wms') {
+  if (layer.type === 'tms') {
+    L.tileLayer(layer.url, {
+      attribution: layer.attribution
+    }).addTo(map);
+  }
+  else if (layer.type === 'wms') {
     L.tileLayer.wms(layer.url, {
       layers: layer.layer,
       format: 'image/png',
       transparent: true,
-      opacity: 1.0
     }).addTo(map);
-  } else if (layer.type === 'wfs') {
+  } 
+  else if (layer.type === 'wfs') {
     let options = {
         version: '1.0.0',
         service: 'WFS',
@@ -72,7 +76,13 @@ export default {
         addLayer(layer, map);
       }
     });
+  },
+
+  methods: {
+        
   }
+
+
 };
 </script>
 
