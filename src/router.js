@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
-import Map from './components/Map.vue'
-import MySurvey from './components/Survey.vue'
-import Login from './components/Login.vue'
+import Home from '@/views/Home.vue'
+import Map from '@/components/Map.vue'
+import MySurvey from '@/components/Survey.vue'
+import Login from '@/components/Login.vue'
 
 Vue.use(Router)
 
-export default new Router({
+export const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -40,4 +40,16 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     }
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const publicPages = ['/login'];
+  const authRequired = !publicPages.includes(to.path);
+  const token = localStorage.getItem('token');
+
+  if (authRequired && !token) {
+    return next('/login');
+  }
+  next();
 })

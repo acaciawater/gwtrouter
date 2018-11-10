@@ -18,13 +18,14 @@ import axios from "axios";
 const logon = user =>
   new Promise((resolve, reject) => {
     axios({
-      url: "http://localhost:8000/api/v1/token/",
+      url: "http://localhost:8000/api/v1/login/",
       data: user,
       method: "POST"
     })
       .then(resp => {
         const token = resp.data.token;
         localStorage.setItem("token", token); // store the token in localstorage
+        localStorage.setItem("user", user.username);
         resolve(resp);
       })
       .catch(err => {
@@ -43,7 +44,7 @@ export default {
     login: function() {
       const { username, password } = this;
       logon({ username, password }).then(() => {
-        this.$router.push("/");
+        this.$router.push({name:'survey'});
       });
     }
   }

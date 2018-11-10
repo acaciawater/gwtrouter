@@ -4,14 +4,14 @@
         "type": "tms",
         "url": "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
         "attribution": "&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors",
-        "visible": false
+        "visible": true
     },
     {
         "name": "Natural Earth",
         "type": "wms",
         "url": "http://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
         "layer": "NaturalEarth",
-        "visible": true
+        "visible": false
     },
     {
         "name": "Countries",
@@ -23,7 +23,7 @@
             "color": "grey",
             "weight": 1
         },
-        "visible": true
+        "visible": false
     },
     {
         "name": "Recharge",
