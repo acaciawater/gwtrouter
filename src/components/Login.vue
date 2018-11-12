@@ -1,54 +1,50 @@
 <template>
- <div>
-   <form class="login" @submit.prevent="login">
-     <h1>Sign in</h1>
-     <label>User name</label>
-     <input required v-model="username" type="text" placeholder="username"/>
-     <label>Password</label>
-     <input required v-model="password" type="password" placeholder="password"/>
-     <hr/>
-     <button type="submit">Login</button>
-   </form>
- </div>
+   <b-container>
+    <b-form @submit.prevent="login">
+      <b-form-group class="row">
+        <label class="col-4" for="username">Username</label>
+        <input class="col-8" id="username" required v-model="username" type="text" placeholder="username"/>
+      </b-form-group>
+      <b-form-group class="row">
+        <label class="col-4" for="password">Password</label>
+        <input class="col-8" id="password" required v-model="password" type="password" placeholder="password"/>
+      </b-form-group>
+    </b-form>
+    <b-button type="submit">Login</b-button>
+   </b-container>
 </template>
 
 <script>
 import axios from "axios";
 
-const logon = user =>
-  new Promise((resolve, reject) => {
-    axios({
-      url: "http://localhost:8000/api/v1/login/",
-      data: user,
-      method: "POST"
-    })
-      .then(resp => {
-        const token = resp.data.token;
-        localStorage.setItem("token", token); // store the token in localstorage
-        localStorage.setItem("user", user.username);
-        resolve(resp);
-      })
-      .catch(err => {
-        localStorage.removeItem("token"); // if the request fails, remove any possible user token if possible
-        console.debug("login failed: " + err);
-        reject(err);
-      });
-  });
-
 export default {
   name: "Login",
   data() {
-    return { username: '', password: '' };
+    return { username: "", password: "" };
   },
   methods: {
     login: function() {
-      const { username, password } = this;
-      logon({ username, password }).then(() => {
-        this.$router.push({name:'survey'});
-      });
+      // login to auth server and fetch jwt token
+      axios.post('http://localhost:8000/api/v1/login/', {
+        username: this.username, 
+        password: this.password
+        })
+        .then(response => { 
+          const token = response.data.token;
+          localStorage.setItem("token", token);
+          localStorage.setItem("user", this.username);
+          console.debug("login succeeded");
+          this.$router.push({ name: "survey" })
+        })
+        .catch(err => {
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          console.debug("login failed: " + err);
+
+        })
     }
   }
-};
+}
 </script>
 
 <style>
