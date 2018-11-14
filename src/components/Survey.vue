@@ -5,7 +5,7 @@
         <survey :survey="survey"></survey>
         </b-col>
         <b-col cols="8">
-          <Map></Map>
+          <Map class="h-100"></Map>
         </b-col>
       </b-row>
     </b-container>
@@ -21,7 +21,19 @@ import axios from 'axios';
 function saveResult(result) {
   let token = localStorage.getItem("token");
   axios.defaults.headers.common['Authorization'] = 'JWT ' + token;
-  axios.post('http://localhost:8000/api/v1/survey/',result.data)
+  let survey = result.data;
+  let data = {
+    project: survey.name,
+    location: {
+      type: "Point",
+      coordinates: [
+        5.0, 52.0
+      ]
+    },
+    user: localStorage.getItem("user"),
+    survey: survey
+  };
+  axios.post('http://localhost:8000/api/v1/survey/',data)
     .then(response => {
       alert('Successfully saved!');
     })

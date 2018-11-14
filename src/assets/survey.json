@@ -68,43 +68,6 @@
           ]
        },
        {
-          "name": "LocationPage",
-          "elements": [
-             {
-                "type": "panel",
-                "name": "panel1",
-                "elements": [
-                   {
-                      "type": "dropdown",
-                      "name": "region",
-                      "title": "Select the continent",
-                      "defaultValue": "Africa",
-                      "isRequired": true,
-                      "choices": [
-                         "Africa",
-                         "Americas",
-                         "Asia",
-                         "Europe",
-                         "Oceania"
-                      ]
-                   },
-                   {
-                      "type": "dropdown",
-                      "name": "country",
-                      "title": "Select the country",
-                      "isRequired": true,
-                      "choicesByUrl": {
-                         "url": "https://restcountries.eu/rest/v2/region/{region}",
-                         "valueName": "name"
-                      },
-                      "optionsCaption": "Select..."
-                   }
-                ]
-             }
-          ],
-          "title": "Select the location of the project"
-       },
-       {
           "name": "MainPage",
           "elements": [
              {

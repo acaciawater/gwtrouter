@@ -11,7 +11,9 @@
         "type": "wms",
         "url": "http://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
         "layer": "NaturalEarth",
-        "visible": false
+        "opacity": 0.5,
+        "maxZoom": 6,
+        "visible": true
     },
     {
         "name": "Countries",
