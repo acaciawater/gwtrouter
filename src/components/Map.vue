@@ -75,7 +75,7 @@ export default {
       center: L.latLng(20, 20),
       markerLocation: L.latLng(20, 20),
       markerVisible: false,
-      address: 'click on map to set the project location',
+      address: 'Click on the map to set the project location',
       layers: jsonData
     };
   },
@@ -112,12 +112,19 @@ export default {
         latlng: this.markerLocation,
         language: "en",
       };
+      this.address = 'Locating...';
       googleAPI.reverseGeocode(reverseGeocodeParams, (err, result) => {
           console.log(result);
-          if (result.status===200) {
+          if (result.json.status==="OK") {
             // todo: check address_components?
-            const location =result.json.results[0];
+            const location = result.json.results[0];
             this.address = location.formatted_address;
+          }
+          else {
+            this.address = 'Unknown location';
+            setTimeout(()=>{
+              this.address = ''
+            }, 2000);
           }
       })
     }
