@@ -56,13 +56,13 @@ export default {
       axios.post('http://localhost:8000/api/v1/token/refresh', {token: this.token})
         .then(response => { 
           const token = response.data.token;
-          localStorage.setItem("token", token);
-          localStorage.setItem("user", this.username);
+          sessionStorage.setItem("token", token);
+          sessionStorage.setItem("user", this.username);
           console.debug("refresh token succeeded: " + response.statusText);
         })
         .catch(err => {
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
+          sessionStorage.removeItem("token");
+          sessionStorage.removeItem("user");
           console.debug("refresh token failed: " + JSON.stringify(err.response.data))
         })
 
@@ -71,8 +71,8 @@ export default {
       axios.post('http://localhost:8000/api/v1/token/', {username: this.username, password: this.password})
         .then(response => { 
           this.token = response.data.token;
-          localStorage.setItem("token", this.token);
-          localStorage.setItem("user", this.username);
+          sessionStorage.setItem("token", this.token);
+          sessionStorage.setItem("user", this.username);
           // console.debug("login succeeded: " + response.statusText);
           // console.debug("query: " + JSON.stringify(this.$route.query));
           let nextUrl = this.$route.query.next;
@@ -80,8 +80,8 @@ export default {
             this.$router.push(nextUrl);
         })
         .catch(err => {
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
+          sessionStorage.removeItem("token");
+          sessionStorage.removeItem("user");
           console.debug("login failed: " + JSON.stringify(err.response.data))
         })
     }
