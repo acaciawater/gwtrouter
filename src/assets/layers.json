@@ -7,13 +7,22 @@
         "visible": true
     },
     {
+        "name": "Water risk",
+        "type": "wms",
+        "url": "http://gis.acaciadata.com/?map=/project/gwtool/GWtool.qgs",
+        "layer": "WaterRisk_Aqueduct",
+        "opacity": 0.6,
+        "maxZoom": 13,
+        "visible": true
+    },
+    {
         "name": "Natural Earth",
         "type": "wms",
         "url": "http://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
         "layer": "NaturalEarth",
         "opacity": 0.5,
         "maxZoom": 6,
-        "visible": true
+        "visible": false
     },
     {
         "name": "Countries",
