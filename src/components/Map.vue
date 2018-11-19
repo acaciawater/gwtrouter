@@ -15,9 +15,11 @@ import L from 'leaflet';
 import { LMap, LTileLayer, LMarker, LIcon } from 'vue2-leaflet';
 import axios from 'axios';
 import jsonData from '@/assets/layers.json';
+import secrets from '@/assets/secrets.json';
+import xml2js from 'xml2js';
 
 var googleAPI = require('@google/maps').createClient({
-  key: 'AIzaSyC87gh7RsWcg0ChwhGQUXQwdfvKzOMysyU'
+  key: secrets.google_api_key
 });
 
 function addLayer(layer, map) {
@@ -68,7 +70,7 @@ function addLayer(layer, map) {
 export default {
   name: 'Map',
   components: { Layer, LMap, LMarker, LTileLayer, LIcon },
-
+  // props: ['center', 'markerLocation', 'markerVisible'],
   data() {
     return {
       zoom: 3,
@@ -104,7 +106,51 @@ export default {
       // sets marker position from map click event
       this.markerLocation = evt.latlng;
       this.markerVisible = true;
-      this.geocode()
+      this.geocode();
+    },
+    inspect(latlng) {
+      // get pixel value at position
+      const lat = latlng.lat
+      const lon = latlng.lng
+      const config = {
+          // map: '/project/gwtool/GWtool.qgs',
+          service: "WMS",
+          request: "GetFeatureInfo",
+          version: "1.3.0",
+          width: 100,
+          height: 100,
+          i: 0,
+          j: 0,
+          srs: "EPSG:4326",
+          bbox: [lat,lon,lat+0.001,lon+0.001].join(','), // wms 1.3: (lat,lon), wsm 1.0: (lon,lat)
+          query_layers: 'WaterRisk_Aqueduct',
+          info_format: "text/xml"                
+      }
+      axios.get('http://gis.acaciadata.com/?map=/project/gwtool/GWtool.qgs', {params: config})
+        .then(response => {
+            //console.log(response) // xml response
+            xml2js.parseString(response.data, (err, result) => {
+              if(err) {
+                console.log(err)
+              }
+              else {
+                //console.log(result)
+                try {
+                  let layers = result['GetFeatureInfoResponse']['Layer']
+                  let attr = layers[0].Attribute[0].$
+                  console.log(attr)
+                }
+                catch(err) {
+                  console.log(err)
+                }
+              }
+            })
+        })
+        .catch(err => {
+            console.log(err) 
+        })
+      return 0.0;
+
     },
     geocode() {
       // retrieve reverse geocoding information for markerLocation
@@ -126,7 +172,8 @@ export default {
               this.address = ''
             }, 2000);
           }
-      })
+      });
+      this.inspect(this.markerLocation)
     }
   }
 };
@@ -137,9 +184,4 @@ export default {
 h3 {
   margin: 1em 0 1em;
 }
-
 </style>
-// ESRI geocoding:
-// http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=pjson&langCode=EN&location=39.2733764,8.54029268
-// Google
-//https://maps.googleapis.com/maps/api/geocode/json?latlng=8.54029268,39.2733764&key=AIzaSyC87gh7RsWcg0ChwhGQUXQwdfvKzOMysyU

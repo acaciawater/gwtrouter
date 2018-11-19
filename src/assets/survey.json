@@ -6,52 +6,52 @@
      "elements": [
       {
        "type": "text",
-       "name": "name",
+       "name": "project_name",
        "title": "What is the name of the project?",
        "isRequired": true,
        "placeHolder": "Project name"
       },
       {
        "type": "dropdown",
-       "name": "question1",
+       "name": "project_type",
        "title": "Wat is the type of the project?",
-       "defaultValue": "item2",
+       "defaultValue": "iwrm",
        "hasOther": true,
        "choices": [
         {
-         "value": "item1",
+         "value": "watersector",
          "text": "Water sector policy and governance"
         },
         {
-         "value": "item2",
+         "value": "iwrm",
          "text": "Integrated water resources management, monitoring and protection"
         },
         {
-         "value": "item3",
+         "value": "capacitybuilding",
          "text": "Water resources education and capacity building"
         },
         {
-         "value": "item4",
+         "value": "urban_watersupply",
          "text": "Urban water supply, sanitation and waste (water) management"
         },
         {
-         "value": "item5",
+         "value": "rural_watersupply",
          "text": "Rural water supply, sanitation and waste (water) management"
         },
         {
-         "value": "item6",
+         "value": "irrigation",
          "text": "Agricultural water use and irrigation"
         },
         {
-         "value": "item7",
+         "value": "rbdm",
          "text": "River basin development and management"
         },
         {
-         "value": "item8",
+         "value": "climatechange",
          "text": "Flood prevention, climate change adaptation and disaster preparedness"
         },
         {
-         "value": "item9",
+         "value": "industry",
          "text": "Industrial applications"
         }
        ]

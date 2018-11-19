@@ -1,0 +1,52 @@
+<template>
+<div>
+    <ul>
+        <Indicator 
+            v-for="(source,index) in indicators" 
+            :source="source"
+            :position="position"
+            :key="index+1"
+            >
+        </Indicator>
+    </ul>
+</div>
+</template>
+
+<script>
+import axios from 'axios';
+import xml2js from 'xml2js';
+import Indicator from '@/components/Indicator.vue'
+
+export default {
+    name: 'Results',
+    components: {
+        Indicator
+    },
+    data() {
+        return {
+            position: [20, 20],
+            indicators: []
+        }
+    },
+    mounted() {
+        // load indicator list from gwt api
+        this.getIndicators().then(result => {
+            this.indicators = result;
+            console.log("Indicators: ", this.indicators)
+        })
+    },
+    methods: {
+        async getIndicators(url='http://localhost:8000/api/v1/indicator/',name=undefined) {
+            return axios.get(url,{'params': name? {name:name}: {}})
+                .then(response => {
+                    return response.data;
+                })
+        }
+    }
+}
+
+</script>
+
+<style>
+
+</style>

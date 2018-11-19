@@ -4,6 +4,7 @@ import Home from '@/views/Home.vue'
 import Map from '@/components/Map.vue'
 import MySurvey from '@/components/Survey.vue'
 import Login from '@/components/Login.vue'
+import Results from '@/components/Results.vue'
 
 Vue.use(Router)
 
@@ -25,6 +26,11 @@ export const router = new Router({
       path: '/survey',
       name: 'survey',
       component: MySurvey
+    },
+    {
+      path: '/result',
+      name: 'result',
+      component: Results
     },
     {
       path: '/login',

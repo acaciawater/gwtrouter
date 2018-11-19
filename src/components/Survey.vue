@@ -5,6 +5,7 @@
         <survey :survey="survey"></survey>
         </b-col>
         <b-col cols="8">
+          <!-- <Map class="h-100" :markerLocation="location" :center="location" :markerVisible="true"></Map> -->
           <Map class="h-100"></Map>
         </b-col>
       </b-row>
@@ -15,75 +16,80 @@
 import { Survey, Model, JsonObject } from "survey-vue";
 import Map from "@/components/Map.vue";
 import "survey-vue/survey.css";
-import surveyData from "@/assets/survey.json";
+import blankSurvey from "@/assets/survey.json";
 import axios from "axios";
 
 JsonObject.metaData.addProperty("question", "popup:text");
 
-function saveResult(result) {
-  let token = sessionStorage.getItem("token");
-  axios.defaults.headers.common["Authorization"] = "JWT " + token;
-  let survey = result.data;
-  let data = {
-    project: survey.name,
-    location: {
-      type: "Point",
-      coordinates: [5.0, 52.0] // TODO: get from map component
-    },
-    user: sessionStorage.getItem("user"),
-    survey: survey
-  };
-  sessionStorage.setItem('survey', data);
-  axios
-    .post("http://localhost:8000/api/v1/survey/", data)
-    .then(response => {
-      alert("Successfully saved!");
-    })
-    .catch(error => {
-      alert(error);
-    });
+let model = new Model(blankSurvey);
+
+let surveyData = localStorage.getItem('survey');
+if (surveyData) {
+  model.data = surveyData.survey
 }
 
-let newSurvey = new Model(surveyData);
-newSurvey.onComplete.add(result => {
-  saveResult(result);
-});
-
-newSurvey.onAfterRenderQuestion.add(function(survey, options) {
+model.onAfterRenderQuestion.add(function(survey, options) {
   if (options) {
-    console.log("onAfterRenderQuestion options", options);
+    // console.log("onAfterRenderQuestion options", options);
     let question = options.question;
     if (question.popup) {
-      var btn = document.createElement("button");
+      let btn = document.createElement("button");
       btn.className = "infobutton";
       btn.innerHTML = "Info";
-      var question = options.question;
-      var anchor = options.htmlElement.querySelector('h5');
-      var parent = anchor.parentNode;
-      // var span = document.createElement("span");
-      // span.innerHTML = " ";
-      // header.appendChild(span);
-      //header.appendChild(btn);
+      const question = options.question;
+      const anchor = options.htmlElement.querySelector('h5');
+      const parent = anchor.parentNode;
       parent.insertBefore(btn, anchor)
-      let element = document.getElementById(options.htmlElement.id);
-      console.log("found element", element);
+      // let element = document.getElementById(options.htmlElement.id);
+      // console.log("found element", element);
     }
   }
-});
+})
 
 export default {
   name: "MySurvey",
+
   components: {
     Survey,
     Map
   },
-  data() {
-    let surveyData = localStorage.getItem('survey');
-    if (surveyData) {
-      surveyData = surveyData.survey
+  
+  methods: {
+
+    saveResult(result) {
+      let token = sessionStorage.getItem("token");
+      axios.defaults.headers.common["Authorization"] = "JWT " + token;
+      let survey = result.data;
+      let data = {
+        project: survey.name,
+        location: {
+          type: "Point",
+          coordinates: this.position
+        },
+        survey: survey
+      };
+      sessionStorage.setItem('survey', data);
+      axios
+        .post("http://localhost:8000/api/v1/survey/", data)
+        .then(response => {
+          alert("Successfully saved!");
+        })
+        .catch(error => {
+          alert(error.response);
+        });
     }
+  },
+
+  mounted() {
+    model.onComplete.add(result => {
+      this.saveResult(result);
+    });
+  },
+  data() {
+
     return {
-      survey: surveyData || newSurvey
+      survey: model,
+      location: L.LatLng(52,5)
     };
   }
 };
