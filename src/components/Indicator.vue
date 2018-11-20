@@ -1,7 +1,10 @@
 <template>
-    <li>
-        {{source.name}} {{risk}} ({{value}})
-    </li>
+    <tr v-bind:class="context">
+        <td>{{source.name}}</td>
+        <td>{{risk}}</td>
+        <td>{{value}}</td>
+        <td>{{reason}}</td>
+    </tr>
 </template>
 
 <script>
@@ -11,18 +14,40 @@ import xml2js from 'xml2js';
 export default {
     name: 'Indicator',
     props: ['source','position'],
+
     data() {
         return {
-            value: 'updating..',
-            risk: 'unknown',
+            value: '',
+            risk: '',
+            reason: 'updating...',
+            context: 'table-light'        
         }
     },
+
     mounted() {
-        this.inspect(this.position)
+        // if (this.position)
+        //     this.inspect(this.position)
     },
+
+    watch : {
+        position: function(pos) {
+            if(pos) 
+                this.inspect(pos);
+        }
+    },
+    
     methods: {
+        clear() {
+            this.value = ''
+            this.risk = ''
+            this.reason = ''
+            this.context = 'table-light'
+        },
+
         inspect(latlng) {
-            // get pixel value and risk class
+            // get pixel value and calculate risk class
+            
+            console.log('INSPECT',this.source.layer,latlng)
             const lat = latlng[0]
             const lon = latlng[1]
             const config = {
@@ -39,36 +64,41 @@ export default {
             let vm = this
             axios.get(this.source.url, {params: config})
                 .then(response => {
-
-                    //console.log(response) // xml response
+                    vm.clear()
                     xml2js.parseString(response.data, (err, result) => {
                         if(err) {
                             console.log(err)
+                            vm.reason = 'Error: ' + err
+                            vm.context = 'table-danger'
                         }
                         else if('ServiceExceptionReport' in result) {
                             let errors = result['ServiceExceptionReport']['ServiceException'].map(x=>x._)
-                            //console.log(errors)
-                            vm.value = 'Error: '+errors.join(',')
-                            vm.risk = ''
+                            console.log(errors)
+                            vm.reason = 'Error: ' + errors.join(',')
+                            vm.context = 'table-danger'
                         }
                         else
                         {
                             // console.log(result)
                             let layers = result['GetFeatureInfoResponse']['Layer']
                             let attr = layers[0].Attribute[0].$
-                            // console.log(attr)
                             const value = attr.value
                             vm.value = value;
 
                             const categories = ['low','medium','high']
+                            const variants = ['table-success','table-warning','table-danger']
                             const clamp = (x, min, max) => {
                                 return Math.min(Math.max(x,min),max)
                             }
                             const limits = vm.source.limits
-                            let index = limits.findIndex(item => {return parseFloat(item.limit) > value})
-                            // console.log('INDEX:', index)
-                            // console.log('LIMITS:', limits, index)
-                            vm.risk = categories[clamp(index,0,2)]
+                            let index = limits.findIndex(item => {
+                                return parseFloat(item.limit) > value
+                            })
+
+                            index = clamp(index,0,2)
+                            vm.risk = categories[index]
+                            vm.reason = limits[index].description
+                            vm.context = variants[index]
                         }
                     })
                 })

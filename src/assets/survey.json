@@ -1,5 +1,5 @@
 {
-   "completedHtml": "<div class='completed'>\n  Thanks for completing the questionnaire. <br/>\n  The results can be found <a href=\"/map\">here</a>\n</div>",
+   "completedHtml": "<div class='completed'>\n  Thanks for completing the questionnaire. <br/>\n  The results can be found <a href=\"/results\">here</a>\n</div>",
    "pages": [
     {
      "name": "Starting page",
@@ -133,13 +133,10 @@
        "type": "dropdown",
        "name": "watersector",
        "title": "In which sector will the groundwater be used?",
-       "defaultValue": "Drinking",
+       "defaultValue": "Drinking water",
        "isRequired": true,
        "choices": [
-        {
-         "value": "Drinking",
-         "text": "Drinking water"
-        },
+        "Drinking water",
         "Irrigation",
         "Livestock",
         "Industry"
@@ -152,6 +149,7 @@
        "title": "Select type of industry",
        "isRequired": true,
        "hasOther": true,
+       "defaultValue": "Food",
        "choices": [
         {
          "value": "Food",
@@ -209,6 +207,7 @@
        "name": "waste_sector",
        "title": "From which sector does the waste originate?",
        "isRequired": true,
+       "defaultVlaue": "Agriculture",
        "choices": [
         "Agriculture",
         "Livestock",
@@ -221,6 +220,7 @@
        "name": "waste_type",
        "title": "What is the concerned type of waste?",
        "isRequired": true,
+       "defaultValue" : "Liquid waste",
        "choices": [
         "Solid waste",
         "Sludge",

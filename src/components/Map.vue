@@ -1,6 +1,6 @@
 <template>
     <div class="h-100">
-      <l-map style="height: 90%" ref='map' :zoom='zoom' :center='center' @mousemove="setCurrent" @click="setMarker">
+      <l-map style="height: 96%" ref='map' :zoom='zoom' :center='center' @mousemove="setCurrent" @click="setMarker">
         <l-marker :visible='markerVisible' :draggable='true' :lat-lng.sync='markerLocation' @dragend="moveMarker"/>
       </l-map>
       {{address}}
@@ -100,11 +100,13 @@ export default {
     moveMarker(evt) {
       // sets marker position from marker's dragend event
       this.markerLocation = evt.target.getLatLng()
+      this.$emit('locationChanged', [evt.latlng.lat, evt.latlng.lng])
       this.geocode();
     },
     setMarker(evt) {
       // sets marker position from map click event
       this.markerLocation = evt.latlng;
+      this.$emit('locationChanged', [evt.latlng.lat, evt.latlng.lng])
       this.markerVisible = true;
       this.geocode();
     },

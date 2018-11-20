@@ -1,6 +1,15 @@
 <template>
 <div>
-    <ul>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Indicator</th>
+                <th>Risk</th>
+                <th>Value</th>
+                <th>Reason</th>
+            </tr>
+        </thead>
+        <tbody>
         <Indicator 
             v-for="(source,index) in indicators" 
             :source="source"
@@ -8,7 +17,8 @@
             :key="index+1"
             >
         </Indicator>
-    </ul>
+        </tbody>
+    </table>        
 </div>
 </template>
 
@@ -22,9 +32,9 @@ export default {
     components: {
         Indicator
     },
+    props: ['position'],
     data() {
         return {
-            position: [20, 20],
             indicators: []
         }
     },
@@ -32,7 +42,7 @@ export default {
         // load indicator list from gwt api
         this.getIndicators().then(result => {
             this.indicators = result;
-            console.log("Indicators: ", this.indicators)
+            // console.log("Indicators: ", this.indicators)
         })
     },
     methods: {

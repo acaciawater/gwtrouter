@@ -2,11 +2,11 @@
     <b-container fluid id="survey" class="h-100">
       <b-row class="h-100">
         <b-col cols="4">
-        <survey :survey="survey"></survey>
+        <Results :position="location" v-show="ready"/>
+        <survey v-show="!ready" :survey="survey"></survey>
         </b-col>
         <b-col cols="8">
-          <!-- <Map class="h-100" :markerLocation="location" :center="location" :markerVisible="true"></Map> -->
-          <Map class="h-100"></Map>
+          <Map class="h-100" @locationChanged="onLocationChanged"></Map>
         </b-col>
       </b-row>
     </b-container>
@@ -15,6 +15,7 @@
 <script>
 import { Survey, Model, JsonObject } from "survey-vue";
 import Map from "@/components/Map.vue";
+import Results from "@/components/Results.vue";
 import "survey-vue/survey.css";
 import blankSurvey from "@/assets/survey.json";
 import axios from "axios";
@@ -51,10 +52,24 @@ export default {
 
   components: {
     Survey,
-    Map
+    Map,
+    Results
   },
   
+  data() {
+
+    return {
+      survey: model,
+      location: L.LatLng(52,5),
+      ready: false
+    };
+  },
+
   methods: {
+    onLocationChanged(newLocation) {
+      this.location = newLocation
+      console.log("location changed", newLocation, this.location)
+    },
 
     saveResult(result) {
       let token = sessionStorage.getItem("token");
@@ -64,7 +79,7 @@ export default {
         project: survey.name,
         location: {
           type: "Point",
-          coordinates: this.position
+          coordinates: [20,20] // this.location
         },
         survey: survey
       };
@@ -75,6 +90,7 @@ export default {
           alert("Successfully saved!");
         })
         .catch(error => {
+          console.log(error.response)
           alert(error.response);
         });
     }
@@ -82,17 +98,12 @@ export default {
 
   mounted() {
     model.onComplete.add(result => {
-      this.saveResult(result);
-    });
+      // this.saveResult(result); // TODO: check if saving succeeded
+      this.ready = true
+    })
   },
-  data() {
-
-    return {
-      survey: model,
-      location: L.LatLng(52,5)
-    };
-  }
 };
+
 </script>
 
 <style>
