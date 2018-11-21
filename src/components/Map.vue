@@ -1,6 +1,6 @@
 <template>
     <div class="h-100">
-      <l-map style="height: 96%" ref='map' :zoom='zoom' :center='center' @mousemove="setCurrent" @click="setMarker">
+      <l-map style="height: 96%" ref='map' :zoom='zoom' :minZoom=2 :center='center' @mousemove="setCurrent" @click="setMarker">
         <l-marker :visible='markerVisible' :draggable='true' :lat-lng.sync='markerLocation' @dragend="moveMarker"/>
       </l-map>
       {{address}}
@@ -27,7 +27,7 @@ export default {
     return {
       zoom: 3,
       center: L.latLng(20, 20),
-      markerLocation: L.latLng(20, 20),
+      markerLocation: L.latLng(52.02136560574015, 4.7101521555446055),
       markerVisible: false,
       address: 'Click on the map to set the project location',
       layers: jsonData
@@ -51,7 +51,9 @@ export default {
     addLayer(layer, map) {
       if (layer.type === 'tms') {
         L.tileLayer(layer.url, {
-          attribution: layer.attribution
+          attribution: layer.attribution,
+          //minZoom: layer.minZoom || 3,
+          maxZoom: layer.maxZoom || 20
         }).addTo(map)
       } else if (layer.type === 'wms') {
         L.tileLayer.wms(layer.url, {
@@ -59,6 +61,7 @@ export default {
           format: 'image/png',
           transparent: true,
           opacity: layer.opacity || 1.0,
+          minZoom: layer.minZoom || 3,
           maxZoom: layer.maxZoom || 18
         }).addTo(map)
       } else if (layer.type === 'wfs') {

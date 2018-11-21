@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 
 export default {
   name: 'Login',
@@ -42,7 +41,7 @@ export default {
     },
 
     verify (evt) {
-      axios.post('/api/v1/token/verify', { token: this.token })
+      this.$http.post('/api/v1/token/verify/', { token: this.token })
         .then(response => {
           console.debug('verify token succeeded: ' + response.statusText)
         })
@@ -52,7 +51,7 @@ export default {
         })
     },
     refresh (evt) {
-      axios.post('http://localhost:8000/api/v1/token/refresh', { token: this.token })
+      this.$http.post('/api/v1/token/refresh/', { token: this.token })
         .then(response => {
           const token = response.data.token
           sessionStorage.setItem('token', token)
@@ -66,7 +65,7 @@ export default {
         })
     },
     obtain (evt) {
-      axios.post('http://localhost:8000/api/v1/token/', { username: this.username, password: this.password })
+      this.$http.post('/api/v1/token/', { username: this.username, password: this.password })
         .then(response => {
           this.token = response.data.token
           sessionStorage.setItem('token', this.token)

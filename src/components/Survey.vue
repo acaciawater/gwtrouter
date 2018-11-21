@@ -81,7 +81,7 @@ export default {
       }
       let config = {headers: {Authorization:'JWT ' + token}}
       sessionStorage.setItem('survey', data)
-      this.$http.post('http://localhost:8000/api/v1/survey/', data, config)
+      this.$http.post('/api/v1/survey/', data, config)
         .then(response => {
           alert('Successfully saved!')
         })

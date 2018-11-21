@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import Indicator from '@/components/Indicator.vue'
 
 export default {
@@ -45,8 +44,8 @@ export default {
     })
   },
   methods: {
-    async getIndicators (url = 'http://localhost:8000/api/v1/indicator/', name = undefined) {
-      return axios.get(url, { 'params': name ? { name: name } : {} })
+    async getIndicators (url = '/api/v1/indicator/', name = undefined) {
+      return this.$http.get(url, { 'params': name ? { name: name } : {} })
         .then(response => {
           return response.data
         })

@@ -8,7 +8,6 @@
 </template>
 
 <script>
-//import axios from 'axios'
 import xml2js from 'xml2js'
 
 export default {
