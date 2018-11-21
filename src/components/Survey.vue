@@ -13,33 +13,31 @@
 </template>
 
 <script>
-import { Survey, Model, JsonObject } from "survey-vue";
-import Map from "@/components/Map.vue";
-import Results from "@/components/Results.vue";
-import "survey-vue/survey.css";
-import blankSurvey from "@/assets/survey.json";
-import axios from "axios";
+import { Survey, Model, JsonObject } from 'survey-vue'
+import Map from '@/components/Map.vue'
+import Results from '@/components/Results.vue'
+import 'survey-vue/survey.css'
+import blankSurvey from '@/assets/survey.json'
 
-JsonObject.metaData.addProperty("question", "popup:text");
+JsonObject.metaData.addProperty('question', 'popup:text')
 
-let model = new Model(blankSurvey);
+let model = new Model(blankSurvey)
 
-let surveyData = localStorage.getItem('survey');
+let surveyData = localStorage.getItem('survey')
 if (surveyData) {
   model.data = surveyData.survey
 }
 
-model.onAfterRenderQuestion.add(function(survey, options) {
+model.onAfterRenderQuestion.add(function (survey, options) {
   if (options) {
     // console.log("onAfterRenderQuestion options", options);
-    let question = options.question;
+    let question = options.question
     if (question.popup) {
-      let btn = document.createElement("button");
-      btn.className = "infobutton";
-      btn.innerHTML = "Info";
-      const question = options.question;
-      const anchor = options.htmlElement.querySelector('h5');
-      const parent = anchor.parentNode;
+      let btn = document.createElement('button')
+      btn.className = 'infobutton'
+      btn.innerHTML = 'Info'
+      const anchor = options.htmlElement.querySelector('h5')
+      const parent = anchor.parentNode
       parent.insertBefore(btn, anchor)
       // let element = document.getElementById(options.htmlElement.id);
       // console.log("found element", element);
@@ -48,61 +46,64 @@ model.onAfterRenderQuestion.add(function(survey, options) {
 })
 
 export default {
-  name: "MySurvey",
+  name: 'MySurvey',
 
   components: {
     Survey,
     Map,
     Results
   },
-  
-  data() {
 
+  data () {
     return {
       survey: model,
-      location: L.LatLng(52,5),
+      location: [52, 5],
       ready: false
-    };
-  },
-
-  methods: {
-    onLocationChanged(newLocation) {
-      this.location = newLocation
-      console.log("location changed", newLocation, this.location)
-    },
-
-    saveResult(result) {
-      let token = sessionStorage.getItem("token");
-      axios.defaults.headers.common["Authorization"] = "JWT " + token;
-      let survey = result.data;
-      let data = {
-        project: survey.name,
-        location: {
-          type: "Point",
-          coordinates: [20,20] // this.location
-        },
-        survey: survey
-      };
-      sessionStorage.setItem('survey', data);
-      axios
-        .post("http://localhost:8000/api/v1/survey/", data)
-        .then(response => {
-          alert("Successfully saved!");
-        })
-        .catch(error => {
-          console.log(error.response)
-          alert(error.response);
-        });
     }
   },
 
-  mounted() {
+  methods: {
+    onLocationChanged (newLocation) {
+      this.location = newLocation
+      // console.log('location changed', newLocation, this.location)
+    },
+
+    saveResult (result) {
+      let token = sessionStorage.getItem('token')
+      let survey = result.data
+      let data = {
+        project: survey.project_name,
+        location: {
+          type: 'Point',
+          coordinates: this.location || [20, 20]
+        },
+        survey: survey
+      }
+      let config = {headers: {Authorization:'JWT ' + token}}
+      sessionStorage.setItem('survey', data)
+      this.$http.post('http://localhost:8000/api/v1/survey/', data, config)
+        .then(response => {
+          alert('Successfully saved!')
+        })
+        .catch(error => {
+          let e = error.response.data
+          let errormsg = ''
+          for(const key in e) {
+            errormsg += key + ': ' + e[key].toString()
+          }
+          console.log(error.response.statusText, errormsg)
+          alert(error.response.statusText + ': ' + errormsg)
+        })
+    }
+  },
+
+  mounted () {
     model.onComplete.add(result => {
-      // this.saveResult(result); // TODO: check if saving succeeded
+      this.saveResult(result); // TODO: check if saving succeeded
       this.ready = true
     })
-  },
-};
+  }
+}
 
 </script>
 

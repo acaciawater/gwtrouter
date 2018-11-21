@@ -26,63 +26,60 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios'
 
 export default {
-  name: "Login",
-  
-  data() {
-    return { username: "", password: "", token: "", passwordVisible: false };
+  name: 'Login',
+
+  data () {
+    return { username: '', password: '', token: '', passwordVisible: false }
   },
-  
+
   methods: {
 
-    togglePasswordVisibility(evt) {
-      this.passwordVisible = !this.passwordVisible;
+    togglePasswordVisibility (evt) {
+      this.passwordVisible = !this.passwordVisible
     },
 
-    verify(evt) {
-      axios.post('http://localhost:8000/api/v1/token/verify', {token: this.token})
-        .then(response => { 
-          console.debug("verify token succeeded: " + response.statusText);
+    verify (evt) {
+      axios.post('/api/v1/token/verify', { token: this.token })
+        .then(response => {
+          console.debug('verify token succeeded: ' + response.statusText)
         })
         .catch(err => {
           // error code 400 (Bad Request). Reason should be in response.statusText
-          console.debug("verify token failed: " + JSON.stringify(err.response.data))
+          console.debug('verify token failed: ' + JSON.stringify(err.response.data))
         })
-
     },
-    refresh(evt) {
-      axios.post('http://localhost:8000/api/v1/token/refresh', {token: this.token})
-        .then(response => { 
-          const token = response.data.token;
-          sessionStorage.setItem("token", token);
-          sessionStorage.setItem("user", this.username);
-          console.debug("refresh token succeeded: " + response.statusText);
+    refresh (evt) {
+      axios.post('http://localhost:8000/api/v1/token/refresh', { token: this.token })
+        .then(response => {
+          const token = response.data.token
+          sessionStorage.setItem('token', token)
+          sessionStorage.setItem('user', this.username)
+          console.debug('refresh token succeeded: ' + response.statusText)
         })
         .catch(err => {
-          sessionStorage.removeItem("token");
-          sessionStorage.removeItem("user");
-          console.debug("refresh token failed: " + JSON.stringify(err.response.data))
+          sessionStorage.removeItem('token')
+          sessionStorage.removeItem('user')
+          console.debug('refresh token failed: ' + JSON.stringify(err.response.data))
         })
-
     },
-    obtain(evt) {
-      axios.post('http://localhost:8000/api/v1/token/', {username: this.username, password: this.password})
-        .then(response => { 
-          this.token = response.data.token;
-          sessionStorage.setItem("token", this.token);
-          sessionStorage.setItem("user", this.username);
+    obtain (evt) {
+      axios.post('http://localhost:8000/api/v1/token/', { username: this.username, password: this.password })
+        .then(response => {
+          this.token = response.data.token
+          sessionStorage.setItem('token', this.token)
+          sessionStorage.setItem('user', this.username)
           // console.debug("login succeeded: " + response.statusText);
           // console.debug("query: " + JSON.stringify(this.$route.query));
-          let nextUrl = this.$route.query.next;
-          if(nextUrl != null)
-            this.$router.push(nextUrl);
+          let nextUrl = this.$route.query.next
+          if (nextUrl != null) { this.$router.push(nextUrl) }
         })
         .catch(err => {
-          sessionStorage.removeItem("token");
-          sessionStorage.removeItem("user");
-          console.debug("login failed: " + JSON.stringify(err.response.data))
+          sessionStorage.removeItem('token')
+          sessionStorage.removeItem('user')
+          console.debug('login failed: ' + JSON.stringify(err.response.data))
         })
     }
   }
@@ -94,6 +91,6 @@ export default {
   position: absolute;
   right: 8px;
   top: 12px;
-  z-index: 999;  
+  z-index: 999;
 }
 </style>

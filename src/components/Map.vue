@@ -8,70 +8,22 @@
 </template>
 
 <script>
-import Layer from '@/components/Layer.vue';
-import querystring from 'querystring';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
-import { LMap, LTileLayer, LMarker, LIcon } from 'vue2-leaflet';
-import axios from 'axios';
-import jsonData from '@/assets/layers.json';
-import secrets from '@/assets/secrets.json';
-import xml2js from 'xml2js';
+import querystring from 'querystring'
+import 'leaflet/dist/leaflet.css'
+import L from 'leaflet'
+import { LMap, LMarker } from 'vue2-leaflet'
+import jsonData from '@/assets/layers.json'
+import secrets from '@/assets/secrets.json'
 
 var googleAPI = require('@google/maps').createClient({
   key: secrets.google_api_key
-});
-
-function addLayer(layer, map) {
-  if (layer.type === 'tms') {
-    L.tileLayer(layer.url, {
-      attribution: layer.attribution
-    }).addTo(map);
-  }
-  else if (layer.type === 'wms') {
-    L.tileLayer.wms(layer.url, {
-      layers: layer.layer,
-      format: 'image/png',
-      transparent: true,
-      opacity: layer.opacity || 1.0,
-      maxZoom: layer.maxZoom || 18
-    }).addTo(map);
-  } 
-  else if (layer.type === 'wfs') {
-    let options = {
-        version: '1.0.0',
-        service: 'WFS',
-        request: 'GetFeature',
-        map: layer.map,
-        typename: layer.layer,
-        outputFormat: 'GeoJSON'
-      };
-    axios.get(layer.url+'?'+querystring.stringify(options)).then(response => {
-      let layerStyle = layer.style;
-      L.geoJSON(response.data,
-      {
-        style: layer.style,
-        onEachFeature: (feature, layer) => {
-          layer.bindTooltip(feature.properties.NAME_LONG);
-          layer.on('mouseover', () => {
-            layer.setStyle({color: 'red', weight: 3});
-            layer.bringToFront();
-          });
-          layer.on('mouseout', () => {
-            layer.setStyle(layerStyle);
-          });
-        },
-      })
-      .addTo(map);
-    });
-  }
-}
+})
 
 export default {
   name: 'Map',
-  components: { Layer, LMap, LMarker, LTileLayer, LIcon },
+  components: { LMap, LMarker },
   // props: ['center', 'markerLocation', 'markerVisible'],
-  data() {
+  data () {
     return {
       zoom: 3,
       center: L.latLng(20, 20),
@@ -79,106 +31,108 @@ export default {
       markerVisible: false,
       address: 'Click on the map to set the project location',
       layers: jsonData
-    };
+    }
   },
 
-  mounted() {
-    let id = 0;
-    let map = this.$refs.map.mapObject;
-    this.layers.forEach(layer => {
-      layer.id = ++id; // add autoincremented id to layer.
-      if (layer.visible) {
-        addLayer(layer, map);
+  mounted () {
+    let id = 0
+    let vm = this
+    let map = vm.$refs.map.mapObject
+    //console.log('adding layers', vm)
+    vm.layers.forEach(layer => {
+      layer.id = ++id // add autoincremented id to layer.
+      if(layer.visible) {
+        vm.addLayer(layer, map)
       }
-    });
+    })
   },
 
   methods: {
-    setCurrent(evt) {
+    addLayer(layer, map) {
+      if (layer.type === 'tms') {
+        L.tileLayer(layer.url, {
+          attribution: layer.attribution
+        }).addTo(map)
+      } else if (layer.type === 'wms') {
+        L.tileLayer.wms(layer.url, {
+          layers: layer.layer,
+          format: 'image/png',
+          transparent: true,
+          opacity: layer.opacity || 1.0,
+          maxZoom: layer.maxZoom || 18
+        }).addTo(map)
+      } else if (layer.type === 'wfs') {
+        let options = {
+          version: '1.0.0',
+          service: 'WFS',
+          request: 'GetFeature',
+          map: layer.map,
+          typename: layer.layer,
+          outputFormat: 'GeoJSON'
+        }
+        this.$http.get(layer.url + '?' + querystring.stringify(options)).then(response => {
+          let layerStyle = layer.style
+          L.geoJSON(response.data, {
+            style: layer.style,
+            onEachFeature: (feature, layer) => {
+              layer.bindTooltip(feature.properties.NAME_LONG)
+              layer.on('mouseover', () => {
+                layer.setStyle({ color: 'red', weight: 3 })
+                layer.bringToFront()
+              })
+              layer.on('mouseout', () => {
+                layer.setStyle(layerStyle)
+              })
+            }
+          }).addTo(map)
+        })
+      }
+    },   
+    setCurrent (evt) {
       this.currentLocation = evt.latlng
     },
-    moveMarker(evt) {
+    moveMarker (evt) {
       // sets marker position from marker's dragend event
-      this.markerLocation = evt.target.getLatLng()
-      this.$emit('locationChanged', [evt.latlng.lat, evt.latlng.lng])
-      this.geocode();
+      let loc = evt.target.getLatLng()
+      this.markerLocation = loc
+      this.$emit('locationChanged', [loc.lat, loc.lng])
+      this.geocode()
     },
-    setMarker(evt) {
+    setMarker (evt) {
       // sets marker position from map click event
-      this.markerLocation = evt.latlng;
-      this.$emit('locationChanged', [evt.latlng.lat, evt.latlng.lng])
-      this.markerVisible = true;
-      this.geocode();
+      let loc = evt.latlng
+      this.markerLocation = loc
+      this.$emit('locationChanged', [loc.lat, loc.lng])
+      this.markerVisible = true
+      this.geocode()
     },
-    inspect(latlng) {
-      // get pixel value at position
-      const lat = latlng.lat
-      const lon = latlng.lng
-      const config = {
-          // map: '/project/gwtool/GWtool.qgs',
-          service: "WMS",
-          request: "GetFeatureInfo",
-          version: "1.3.0",
-          width: 100,
-          height: 100,
-          i: 0,
-          j: 0,
-          srs: "EPSG:4326",
-          bbox: [lat,lon,lat+0.001,lon+0.001].join(','), // wms 1.3: (lat,lon), wsm 1.0: (lon,lat)
-          query_layers: 'WaterRisk_Aqueduct',
-          info_format: "text/xml"                
-      }
-      axios.get('http://gis.acaciadata.com/?map=/project/gwtool/GWtool.qgs', {params: config})
-        .then(response => {
-            //console.log(response) // xml response
-            xml2js.parseString(response.data, (err, result) => {
-              if(err) {
-                console.log(err)
-              }
-              else {
-                //console.log(result)
-                try {
-                  let layers = result['GetFeatureInfoResponse']['Layer']
-                  let attr = layers[0].Attribute[0].$
-                  console.log(attr)
-                }
-                catch(err) {
-                  console.log(err)
-                }
-              }
-            })
-        })
-        .catch(err => {
-            console.log(err) 
-        })
-      return 0.0;
-
-    },
-    geocode() {
+    geocode () {
       // retrieve reverse geocoding information for markerLocation
       const reverseGeocodeParams = {
         latlng: this.markerLocation,
-        language: "en",
-      };
-      this.address = 'Locating...';
+        language: 'en'
+      }
+      this.address = 'Locating...'
       googleAPI.reverseGeocode(reverseGeocodeParams, (err, result) => {
-          console.log(result);
-          if (result.json.status==="OK") {
-            // todo: check address_components?
-            const location = result.json.results[0];
-            this.address = location.formatted_address;
-          }
-          else {
-            this.address = 'Unknown location';
-            setTimeout(()=>{
-              this.address = ''
-            }, 2000);
-          }
-      });
-      this.inspect(this.markerLocation)
-    }
+        // console.log(result)
+        if (err) {
+
+        }
+        if (result.json.status === 'OK') {
+          // todo: check address_components?
+          const location = result.json.results[0]
+          this.address = location.formatted_address
+        } else {
+          this.address = 'Unknown location'
+          setTimeout(() => {
+            this.address = ''
+          }, 2000)
+        }
+      })
+    },
+    
   }
-};
+}
 </script>
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->

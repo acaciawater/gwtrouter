@@ -207,7 +207,7 @@
        "name": "waste_sector",
        "title": "From which sector does the waste originate?",
        "isRequired": true,
-       "defaultVlaue": "Agriculture",
+       "defaultValue": "Agriculture",
        "choices": [
         "Agriculture",
         "Livestock",

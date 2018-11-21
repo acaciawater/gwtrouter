@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
+import axios from 'axios'
 
 // code below needed for markers to show on map
 // eslint-disable-next-line
@@ -18,6 +19,9 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png')
 })
 // end of marker code
+
+axios.defaults.baseURL = 'http://localhost:8000'
+Vue.prototype.$http = axios
 
 Vue.use(BootstrapVue)
 Vue.component('v-icon', Icon)
