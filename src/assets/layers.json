@@ -2,8 +2,8 @@
     {
         "name": "Open Streetmap",
         "type": "tms",
-        "url": "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
-        "attribution": "&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors",
+        "url": "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
+        "attribution": "&copy; <a href=\"https://osm.org/copyright\">OpenStreetMap</a> contributors",
         "visible": true,
         "minZoom": 2,
         "maxZoom": 20
@@ -11,7 +11,7 @@
     {
         "name": "Water risk",
         "type": "wms",
-        "url": "http://gis.acaciadata.com/?map=/project/gwtool/tool2.qgs",
+        "url": "https://gis.acaciadata.com/?map=/project/gwtool/tool2.qgs",
         "layer": "Main",
         "opacity": 1.0,
         "minZoom": 2,
@@ -21,7 +21,7 @@
     {
         "name": "Water risk",
         "type": "wms",
-        "url": "http://gis.acaciadata.com/?map=/project/gwtool/GWtool.qgs",
+        "url": "https://gis.acaciadata.com/?map=/project/gwtool/GWtool.qgs",
         "layer": "WaterRisk_Aqueduct",
         "opacity": 0.6,
         "maxZoom": 13,
@@ -30,7 +30,7 @@
     {
         "name": "Natural Earth",
         "type": "wms",
-        "url": "http://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
+        "url": "https://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
         "layer": "NaturalEarth",
         "opacity": 0.5,
         "maxZoom": 6,
@@ -39,7 +39,7 @@
     {
         "name": "Countries",
         "type": "wfs",
-        "url": "http://gis.acaciadata.com",
+        "url": "https://gis.acaciadata.com",
         "map": "/project/gwtool/tool.qgs",
         "layer": "Countries",
         "style": {
@@ -51,73 +51,73 @@
     {
         "name": "Recharge",
         "type": "wms",
-        "url": "http://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
+        "url": "https://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
         "visible": false
     },
     {
         "name": "Aquifer stress",
         "type": "wms",
-        "url": "http://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
+        "url": "https://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
         "visible": false
     },
     {
         "name": "Aridity index",
         "type": "wms",
-        "url": "http://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
+        "url": "https://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
         "visible": false
     },
     {
         "name": "Landuse",
         "type": "wms",
-        "url": "http://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
+        "url": "https://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
         "visible": false
     },
     {
         "name": "Salinity",
         "type": "wms",
-        "url": "http://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
+        "url": "https://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
         "visible": false
     },
     {
         "name": "Fluoride",
         "type": "wms",
-        "url": "http://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
+        "url": "https://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
         "visible": false
     },
     {
         "name": "Arsenic",
         "type": "wms",
-        "url": "http://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
+        "url": "https://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
         "visible": false
     },
     {
         "name": "Vulnerability",
         "type": "wms",
-        "url": "http://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
+        "url": "https://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
         "visible": false
     },
     {
         "name": "Population",
         "type": "wms",
-        "url": "http://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
+        "url": "https://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
         "visible": false
     },
     {
         "name": "Abstractions",
         "type": "wms",
-        "url": "http://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
+        "url": "https://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
         "visible": false
     },
     {
         "name": "Precipitation",
         "type": "wms",
-        "url": "http://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
+        "url": "https://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
         "visible": false
     },
     {
         "name": "Evapotranspiration",
         "type": "wms",
-        "url": "http://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
+        "url": "https://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
         "visible": false
     }
 ]
