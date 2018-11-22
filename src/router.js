@@ -54,8 +54,8 @@ router.beforeEach((to, from, next) => {
   const authRequired = !publicPages.includes(to.path)
   const token = sessionStorage.getItem('token')
   if (authRequired && !token) {
-    console.debug('restricted: ' + to.fullPath)
-    console.debug('redirecting to /login?nextUrl=' + to.fullPath)
+    // console.debug('restricted: ' + to.fullPath)
+    // console.debug('redirecting to /login?nextUrl=' + to.fullPath)
     return next({
       path: '/login',
       query: { next: to.fullPath }
