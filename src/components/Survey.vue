@@ -1,15 +1,21 @@
 <template>
-    <b-container fluid id="survey" class="h-100">
-      <b-row class="h-100">
-        <b-col cols="4">
-        <Results :position="location" v-show="ready"/>
-        <survey v-show="!ready" :survey="survey"></survey>
-        </b-col>
-        <b-col cols="8">
-          <Map class="h-100" @locationChanged="onLocationChanged"></Map>
-        </b-col>
-      </b-row>
-    </b-container>
+      <b-container fluid id="survey" class="h-100">
+      <div id="nav">
+        <li title="Questionnaire" class="navitem"><v-icon name="poll-h" scale="2"/></li>
+        <li title="Map" class="navitem"><v-icon name="map" scale="2"/></li>
+        <li title="Report" class="navitem"><v-icon name="file-alt" scale="2"/></li>
+      </div>
+        <b-row class="h-100">
+          <b-col cols="4">
+          <Results :position="location" v-show="ready"/>
+          <survey v-show="!ready" :survey="survey"></survey>
+          </b-col>
+          <b-col cols="8">
+            <Map class="h-100" @locationChanged="onLocationChanged"></Map>
+          </b-col>
+        </b-row>
+      </b-container>
+
 </template>
 
 <script>
@@ -107,14 +113,38 @@ export default {
 
 </script>
 
-<style>
-/* .sv_row :hover {
-  border: 1px solid red;
-} */
+<style scoped>
 .infobutton {
   /* background: rgb(7, 1, 95) !important; */
   min-width: 20px !important;
   padding: 0 1em !important;
   float: right !important;
+}
+.navitem {
+  display: block;
+  color: rgb(122, 206, 136);
+  padding: 0 1em;
+  margin-top: 1em;
+  margin-bottom: 4em;
+}
+
+#nav {
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+  width: 4em; /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  background-color: rgb(58, 131, 107);
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 20px;
+}
+
+#nav li.active {
+  color: #ffffff;
+}
+
+#nav li:hover {
+  color: #ffffff;
 }
 </style>
