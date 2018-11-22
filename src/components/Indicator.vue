@@ -18,14 +18,9 @@ export default {
     return {
       value: "",
       risk: "",
-      reason: "updating...",
+      reason: "",
       context: "table-light"
     };
-  },
-
-  mounted() {
-    // if (this.position)
-    //     this.inspect(this.position)
   },
 
   watch: {
@@ -64,6 +59,7 @@ export default {
         info_format: "text/xml"
       };
       let vm = this;
+      vm.reason = 'Updating...'
       this.$http
         .get(this.source.url, { params: config })
         .then(response => {
@@ -104,7 +100,8 @@ export default {
                 vm.value = value;
                 vm.risk = categories[index];
                 vm.context = variants[index];
-                vm.reason = limits[Math.min(index, limits.length - 1)].description;
+                vm.reason =
+                  limits[Math.min(index, limits.length - 1)].description;
               }
             }
           });

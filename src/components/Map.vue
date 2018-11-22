@@ -15,14 +15,9 @@ import { LMap, LMarker } from 'vue2-leaflet'
 import jsonData from '@/assets/layers.json'
 import secrets from '@/assets/secrets.json'
 
-var googleAPI = require('@google/maps').createClient({
-  key: secrets.google_api_key
-})
-
 export default {
   name: 'Map',
   components: { LMap, LMarker },
-  // props: ['center', 'markerLocation', 'markerVisible'],
   data () {
     return {
       zoom: 3,
@@ -111,19 +106,19 @@ export default {
     },
     geocode () {
       // retrieve reverse geocoding information for markerLocation
-      const reverseGeocodeParams = {
-        latlng: this.markerLocation,
-        language: 'en'
-      }
-      this.address = 'Locating...'
-      googleAPI.reverseGeocode(reverseGeocodeParams, (err, result) => {
-        // console.log(result)
-        if (err) {
-
+      let config = {
+        params: {
+          language: 'en', 
+          latlng: this.markerLocation.lat.toFixed(8)+','+this.markerLocation.lng.toFixed(8), 
+          key: secrets.google_api_key
+          }
         }
-        if (result.json.status === 'OK') {
+      this.address = 'Locating...'
+      this.$http.get('https://maps.googleapis.com/maps/api/geocode/json', config).then(result => {
+        console.debug(result)
+        if (result.statusText === 'OK') {
           // todo: check address_components?
-          const location = result.json.results[0]
+          const location = result.data.results[0]
           this.address = location.formatted_address
         } else {
           this.address = 'Unknown location'
@@ -131,9 +126,11 @@ export default {
             this.address = ''
           }, 2000)
         }
+      }).catch(err=>{
+        console.error(err)
+        this.address = ''
       })
-    },
-    
+    },    
   }
 }
 </script>
