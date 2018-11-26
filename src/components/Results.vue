@@ -30,41 +30,49 @@ export default {
   components: {
     Indicator
   },
-  props: ['position'],
+  props: ['position', 'survey'],
   data () {
     return {
       indicators: []
     }
   },
+  watch: {
+    survey: function(oldSurvey, newSurvey) {
+        this.updateResults(newSurvey)
+    }
+  },
+
   mounted () {
     // load indicator list from gwt api
     this.getIndicators().then(result => {
       this.indicators = result
-      // console.log("Indicators: ", this.indicators)
-      let surveyData = localStorage.getItem("survey")
-      if(surveyData) {
-        console.debug('survey found:')
-        let survey = JSON.parse(surveyData).survey
-        console.debug(survey)
-        let selected = this.selectIndicators(survey)
-        this.indicators.forEach(indicator => {
-          indicator.selected = selected.has(indicator.name)
-        })
-      console.log("Indicators: ", this.indicators)
-      }
     })
   },
+
   methods: {
+
+    updateResults(survey, options) {
+      //console.log("Updating", survey, options)
+      let selected = this.selectIndicators(survey.data)
+      console.log("selected indicators:", selected)
+      this.indicators.forEach(indicator => {
+        indicator.selected = selected.has(indicator.name)
+      })
+      console.log("Indicators: ", this.indicators)
+    },
+
     async getIndicators (url = '/api/v1/indicator/', name = undefined) {
+      // retrieve indicator list from backend
       return this.$http.get(url, { 'params': name ? { name: name } : {} })
         .then(response => {
           return response.data
         })
     },
     selectIndicators(data) {
-      // get indicators for survey
+      // select indicators for survey
       let indicators = new Set()
       if(data.usegw==="yes") {
+        console.log('Groundwater')
         indicators.add("Groundwater stress")
         indicators.add("Recharge")
         indicators.add("Population growth")
@@ -90,14 +98,17 @@ export default {
         }
       }
       if(data.generates_waste==="yes") {
-        indicators.add("Vulnerability")
+        console.log('Waste')
+        indicators.add("Groundwater vulnerability")
       }
       if(data.surface==="yes") {
+        console.log('Surface water')
         indicators.add("Population density upstream") // not yet available?
         indicators.add("Return flow ratio")
       }
       if(data.landuse==="yes") {
-        // add test recharge reduction
+        // add test for recharge reduction
+        console.log('Land use change')
         indicators.add("Recharge")
         indicators.add("Groundwater stress")
         indicators.add("Downstream vulnerable") // not available?

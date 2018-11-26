@@ -24,6 +24,10 @@ export default {
   },
 
   watch: {
+    source: function(source) {
+      this.inspect(this.position)
+    },
+
     position: function (pos) {
       if (pos) {
         this.inspect(pos)

@@ -1,13 +1,13 @@
 <template>
       <b-container fluid id="survey" class="h-100">
       <div id="nav">
-        <li title="Questionnaire" class="navitem"><v-icon name="poll-h" scale="2"/></li>
+        <li title="Questionnaire" class="navitem" @click="ready=false"><v-icon name="poll-h" scale="2"/></li>
         <li title="Map" class="navitem"><v-icon name="map" scale="2"/></li>
-        <li title="Report" class="navitem"><v-icon name="file-alt" scale="2"/></li>
+        <li title="Report" class="navitem" @click="ready=true"><v-icon name="file-alt" scale="2"/></li>
       </div>
         <b-row class="h-100">
           <b-col cols="4">
-          <Results :position="location" v-show="ready"/>
+          <Results ref="result" :position="location" :survey="survey" v-show="ready"/>
           <survey v-show="!ready" :survey="survey"></survey>
           </b-col>
           <b-col cols="8">
@@ -63,7 +63,7 @@ export default {
   data () {
     return {
       survey: model,
-      location: [52, 5],
+      location: [0,0],
       ready: false
     }
   },
@@ -75,21 +75,22 @@ export default {
     },
 
     saveResult (result) {
-      let token = sessionStorage.getItem('token')
       let survey = result.data
       let data = {
         project: survey.project_name,
         location: {
           type: 'Point',
-          coordinates: this.location || [20, 20]
+          coordinates: this.location
         },
         survey: survey
       }
-      let config = { headers: { Authorization: 'JWT ' + token } }
       localStorage.setItem('survey', JSON.stringify(data))
-      this.$http.post('/api/v1/survey/', data, config)
-        .then(response => {
-          //alert('Successfully saved!')
+
+      let token = sessionStorage.getItem('token')
+      let config = { headers: { Authorization: 'JWT ' + token } }
+      this.$http.post('/api/v1/survey/', data, config).then(response => {
+          console.debug('Successfully saved!')
+          console.debug(response)
         })
         .catch(error => {
           let e = error.response.data
@@ -98,18 +99,22 @@ export default {
             errormsg += key + ': ' + e[key].toString()
           }
           console.error(error.response.statusText, errormsg)
-          //alert(error.response.statusText + ': ' + errormsg)
         })
     }
   },
 
   mounted () {
+    model.onValueChanged.add((sender,options) => {
+      //console.log("Survey Value Changed", options)
+      this.$refs.result.updateResults(sender,options)
+      //this.$emit("surveyChanged", sender, options)
+    })
     model.onComplete.add(result => {
       this.saveResult(result) // TODO: check if saving succeeded
+      this.survey.clear(false,false)
       this.ready = true
     })
   }
-
 }
 
 </script>
