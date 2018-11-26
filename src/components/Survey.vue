@@ -31,7 +31,7 @@ let model = new Model(blankSurvey)
 
 let surveyData = localStorage.getItem('survey')
 if (surveyData) {
-  model.data = surveyData.survey
+  model.data = JSON.parse(surveyData).survey
 }
 
 model.onAfterRenderQuestion.add(function (survey, options) {
@@ -85,30 +85,31 @@ export default {
         },
         survey: survey
       }
-      let config = {headers: {Authorization:'JWT ' + token}}
-      sessionStorage.setItem('survey', data)
+      let config = { headers: { Authorization: 'JWT ' + token } }
+      localStorage.setItem('survey', JSON.stringify(data))
       this.$http.post('/api/v1/survey/', data, config)
         .then(response => {
-          alert('Successfully saved!')
+          //alert('Successfully saved!')
         })
         .catch(error => {
           let e = error.response.data
           let errormsg = ''
-          for(const key in e) {
+          for (const key in e) {
             errormsg += key + ': ' + e[key].toString()
           }
-          console.log(error.response.statusText, errormsg)
-          alert(error.response.statusText + ': ' + errormsg)
+          console.error(error.response.statusText, errormsg)
+          //alert(error.response.statusText + ': ' + errormsg)
         })
     }
   },
 
   mounted () {
     model.onComplete.add(result => {
-      this.saveResult(result); // TODO: check if saving succeeded
+      this.saveResult(result) // TODO: check if saving succeeded
       this.ready = true
     })
   }
+
 }
 
 </script>
