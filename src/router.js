@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/views/Home.vue'
+// import Home from '@/views/Home.vue'
 import Map from '@/components/Map.vue'
 import MySurvey from '@/components/Survey.vue'
 import Login from '@/components/Login.vue'
@@ -9,13 +9,13 @@ import Results from '@/components/Results.vue'
 Vue.use(Router)
 
 export const router = new Router({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: MySurvey
     },
     {
       path: '/map',
@@ -52,6 +52,7 @@ router.beforeEach((to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
   const publicPages = ['/login']
   const authRequired = !publicPages.includes(to.path)
+  // TODO: verify token
   const token = sessionStorage.getItem('token')
   if (authRequired && !token) {
     // console.debug('restricted: ' + to.fullPath)
