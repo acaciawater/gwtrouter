@@ -4,7 +4,7 @@
         "type": "tms",
         "url": "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
         "attribution": "&copy; <a href=\"https://osm.org/copyright\">OpenStreetMap</a> contributors",
-        "visible": true,
+        "visible": false,
         "minZoom": 2,
         "maxZoom": 20
     },
@@ -15,7 +15,7 @@
         "layer": "Main",
         "opacity": 1.0,
         "minZoom": 2,
-        "maxZoom": 10,
+        "maxZoom": 20,
         "visible": true
     },
     {
