@@ -33,21 +33,21 @@ export default {
     let id = 0
     let vm = this
     let map = vm.$refs.map.mapObject
-    //console.log('adding layers', vm)
+    // console.log('adding layers', vm)
     vm.layers.forEach(layer => {
       layer.id = ++id // add autoincremented id to layer.
-      if(layer.visible) {
+      if (layer.visible) {
         vm.addLayer(layer, map)
       }
     })
   },
 
   methods: {
-    addLayer(layer, map) {
+    addLayer (layer, map) {
       if (layer.type === 'tms') {
         L.tileLayer(layer.url, {
           attribution: layer.attribution,
-          //minZoom: layer.minZoom || 3,
+          // minZoom: layer.minZoom || 3,
           maxZoom: layer.maxZoom || 20
         }).addTo(map)
       } else if (layer.type === 'wms') {
@@ -85,7 +85,7 @@ export default {
           }).addTo(map)
         })
       }
-    },   
+    },
     setCurrent (evt) {
       this.currentLocation = evt.latlng
     },
@@ -108,29 +108,30 @@ export default {
       // retrieve reverse geocoding information for markerLocation
       let config = {
         params: {
-          language: 'en', 
-          latlng: this.markerLocation.lat.toFixed(8)+','+this.markerLocation.lng.toFixed(8), 
+          language: 'en',
+          latlng: this.markerLocation.lat.toFixed(8) + ',' + this.markerLocation.lng.toFixed(8),
           key: secrets.google_api_key
-          }
         }
+      }
       this.address = 'Locating...'
       this.$http.get('https://maps.googleapis.com/maps/api/geocode/json', config).then(result => {
-        console.debug(result)
-        if (result.statusText === 'OK') {
+        if (result.status < 400) {
+          //console.log('FOUND!', result)
           // todo: check address_components?
           const location = result.data.results[0]
           this.address = location.formatted_address
         } else {
+          //console.debug('NOT FOUND!', result)
           this.address = 'Unknown location'
           setTimeout(() => {
             this.address = ''
           }, 2000)
         }
-      }).catch(err=>{
+      }).catch(err => {
         console.error(err)
         this.address = ''
       })
-    },    
+    }
   }
 }
 </script>
