@@ -1,5 +1,4 @@
 {
-   "completedHtml": "<div class='completed'>\n  Thanks for completing the questionnaire. <br/>\n  The results can be found <a href=\"/results\">here</a>\n</div>",
    "pages": [
     {
      "name": "Starting page",
