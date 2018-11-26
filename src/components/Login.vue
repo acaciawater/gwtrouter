@@ -12,7 +12,7 @@
                 <span title="Hide password" v-on:click="togglePasswordVisibility"> <v-icon id="eye" name="eye-slash" scale="1.5"/></span>
               </template>
               <template v-else>
-                <b-input class="form-control form-control-lg" id="password" required v-model="password" type="password" placeholder="password"/>
+                <b-input class="form-control form-control-lg" id="password" required v-model="password" type="password" placeholder="password" autocomplete="on"/>
                 <span title="Show password" v-on:click="togglePasswordVisibility"> <v-icon id="eye" name="eye" scale="1.5"/></span>
               </template>
             </b-input-group>
