@@ -11,6 +11,13 @@
        "placeHolder": "Project name"
       },
       {
+       "type": "text",
+       "name": "address",
+       "title": "Enter the project location",
+       "isRequired": true,
+       "readOnly": true
+      },
+      {
        "type": "dropdown",
        "name": "project_type",
        "title": "Wat is the type of the project?",
@@ -83,7 +90,7 @@
        "title": "Does the project use groundwater, or plan to do so?",
        "defaultValue": "yes",
        "isRequired": true,
-       "popup": "Groundwater projects are fun!",
+       "popup": "yes",
        "choices": [
         "yes",
         "no"
@@ -95,7 +102,7 @@
        "title": "Does the project generate waste that needs to be drained, discharged or treated?",
        "defaultValue": "yes",
        "isRequired": true,
-       "popup": "Generating waste is not accepted generally",
+       "popup": "yes",
        "choices": [
         "yes",
         "no"
@@ -106,6 +113,7 @@
        "name": "surface",
        "title": "Does the project use or plan structures that slow or retain surface water? (i.e. dams, channel modifications)",
        "defaultValue": "no",
+       "popup": "yes",
        "isRequired": true,
        "choices": [
         "yes",
@@ -118,6 +126,7 @@
        "title": "Will land cover change during or as a result of the project? (i.e. deforestation, crop change, urbanization)",
        "defaultValue": "no",
        "isRequired": true,
+       "popup": "yes",
        "choices": [
         "yes",
         "no"
@@ -146,9 +155,9 @@
        "name": "industry_type",
        "visibleIf": "{watersector} = \"Industry\"",
        "title": "Select type of industry",
+       "defaultValue": "Food",
        "isRequired": true,
        "hasOther": true,
-       "defaultValue": "Food",
        "choices": [
         {
          "value": "Food",
@@ -163,12 +172,13 @@
        "type": "radiogroup",
        "name": "drinkingwater_beneficiaries",
        "visibleIf": "{watersector} = \"Drinking\" or \n{watersector} = \"Irrigation\" or \n{watersector} = \"Livestock\" or\n({watersector} = \"Industry\" and {industry_type} = \"Food\")",
-       "title": "Do the beneficiaries live in urban or rural areas?",
+       "title": "Is the drinking water meant for urban or rural areas?",
        "defaultValue": "Urban",
        "isRequired": true,
        "choices": [
         "Urban",
-        "Rural"
+        "Rural",
+        "Both"
        ]
       },
       {
@@ -179,19 +189,11 @@
        "defaultValue": "Deep",
        "choices": [
         "Shallow",
-        "Deep"
-       ]
-      },
-      {
-       "type": "radiogroup",
-       "name": "gw_irrigation",
-       "visibleIf": "{watersector} = \"Irrigation\" or {watersector} = \"Livestock\"",
-       "title": "Are there plans to improve water use efficiency (e.g. irrigation improvement)",
-       "defaultValue": "no",
-       "isRequired": true,
-       "choices": [
-        "yes",
-        "no"
+        "Deep",
+        {
+         "value": "Both",
+         "text": "Don't know"
+        }
        ]
       }
      ],
@@ -205,8 +207,8 @@
        "type": "dropdown",
        "name": "waste_sector",
        "title": "From which sector does the waste originate?",
-       "isRequired": true,
        "defaultValue": "Agriculture",
+       "isRequired": true,
        "choices": [
         "Agriculture",
         "Livestock",
@@ -218,8 +220,8 @@
        "type": "dropdown",
        "name": "waste_type",
        "title": "What is the concerned type of waste?",
+       "defaultValue": "Liquid waste",
        "isRequired": true,
-       "defaultValue" : "Liquid waste",
        "choices": [
         "Solid waste",
         "Sludge",
@@ -262,18 +264,19 @@
        "title": "What is the current land use?",
        "isRequired": true,
        "choices": [
+        "Forest",
+        "Grassland",
         {
-         "value": "item1",
-         "text": "landuse1"
+         "value": "Rainfed",
+         "text": "Rainfed agriculture"
         },
         {
-         "value": "item2",
-         "text": "landuse2"
+         "value": "Irrigated",
+         "text": "Irrigated agriculture"
         },
-        {
-         "value": "item3",
-         "text": "landuse3"
-        }
+        "Urban",
+        "Wetland",
+        "Bare"
        ]
       },
       {
@@ -282,18 +285,19 @@
        "title": "What is the future land use?",
        "isRequired": true,
        "choices": [
+        "Forest",
+        "Grassland",
         {
-         "value": "item1",
-         "text": "landuse1"
+         "value": "Rainfed",
+         "text": "Rainfed agriculture"
         },
         {
-         "value": "item2",
-         "text": "landuse2"
+         "value": "Irrigated",
+         "text": "Irrigated agriculture"
         },
-        {
-         "value": "item3",
-         "text": "landuse3"
-        }
+        "Urban",
+        "Wetland",
+        "Bare"
        ]
       }
      ],

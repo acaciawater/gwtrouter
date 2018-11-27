@@ -1,0 +1,22 @@
+{
+    "Columns": ["Forest", "Grassland", "Rainfed", "Irrigated", "Urban", "Wetland", "Bare", "Quantity"],
+    "Quantity": {
+        "Forest":    [ 0, 1, 1, 1,-1, 1, 1],
+        "Grassland": [-1, 0,-1, 1,-1, 1, 1],
+        "Rainfed":   [-1, 1, 0, 0,-1, 1, 1],
+        "Irrigated": [-1,-1,-1, 0,-1, 1,-1],
+        "Urban":     [ 1, 1, 1, 1, 0, 1, 1],
+        "Wetland":   [-1,-1,-1,-1,-1, 0,-1],
+        "Bare":      [-1,-1,-1,-1,-1, 1, 0]
+    },
+    "Quality": {
+        "Forest":    [ 0, 0,-1,-1,-1, 1, 0],
+        "Grassland": [ 0, 0,-1, 1,-1, 1, 0],
+        "Rainfed":   [ 1, 1, 0, 0,-1, 1, 0],
+        "Irrigated": [ 1, 1, 0, 0,-1, 1, 1],
+        "Urban":     [ 1, 1,-1, 0, 0, 1, 0],
+        "Wetland":   [ 0, 0,-1,-1,-1, 0, 0],
+        "Bare":      [ 0, 0,-1,-1,-1, 1, 0]
+
+    }
+}

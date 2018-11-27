@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import Home from '@/views/Home.vue'
+import Home from '@/views/Home.vue'
 import Map from '@/components/Map.vue'
 import MySurvey from '@/components/Survey.vue'
 import Login from '@/components/Login.vue'
@@ -9,13 +9,14 @@ import Results from '@/components/Results.vue'
 Vue.use(Router)
 
 export const router = new Router({
-  mode: 'hash',
+  // mode: 'hash',
+  mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
       name: 'home',
-      component: MySurvey
+      component: Home
     },
     {
       path: '/map',

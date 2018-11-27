@@ -1,9 +1,10 @@
 <template>
     <tr v-bind:class="source.selected?context:'table-light text-muted'">
-        <td>{{source.name}}</td>
-        <td>{{risk}}</td>
-        <td>{{value}}</td>
-        <td>{{reason}}</td>
+      <!-- <td><span><v-icon color="rgb(58, 131, 107)" name="info-circle"/>{{source.name}}</span></td> -->
+      <td>{{source.name}}</td>
+      <td>{{risk}}</td>
+      <!-- <td>{{value}}</td> -->
+      <td>{{reason}}</td>
     </tr>
 </template>
 
@@ -88,7 +89,10 @@ export default {
               if (value == 'no data') {
                 vm.rish = 'unknown'
                 vm.context = 'table-warning'
-                vm.reason = 'Indicator cannot be evaluated at this location'
+                vm.reason = 'Indicator cannot be evaluated at this location.'
+                if(vm.source.name==="Groundwater stress") {
+                  vm.reason += '\nRecharge can be used as a proxy for groundwater stress'
+                }
               } else {
                 const categories = ['low', 'medium', 'high']
                 const variants = [
@@ -119,5 +123,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.info {
+  color: blue;
+
+}
 </style>

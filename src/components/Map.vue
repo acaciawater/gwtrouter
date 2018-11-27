@@ -1,9 +1,9 @@
 <template>
     <div class="h-100">
-      <l-map style="height: 96%" ref='map' :zoom='zoom' :minZoom=2 :center='center' @mousemove="setCurrent" @click="setMarker">
+      <l-map style="height: 100%" ref='map' :zoom='zoom' :minZoom=2 :center='center' @mousemove="setCurrent" @click="setMarker">
         <l-marker :visible='markerVisible' :draggable='true' :lat-lng.sync='markerLocation' @dragend="moveMarker"/>
       </l-map>
-      {{address}}
+      <!-- {{address}} -->
     </div>
 </template>
 
@@ -18,6 +18,7 @@ import secrets from '@/assets/secrets.json'
 export default {
   name: 'Map',
   components: { LMap, LMarker },
+  //props: ['markerVisible', 'markerLocation', 'address'],
   data () {
     return {
       zoom: 3,
@@ -92,20 +93,27 @@ export default {
     moveMarker (evt) {
       // sets marker position from marker's dragend event
       let loc = evt.target.getLatLng()
-      this.markerLocation = loc
-      this.$emit('locationChanged', [loc.lat, loc.lng])
-      this.geocode()
+      if(loc) {
+        this.markerLocation = loc
+        this.$emit('locationChanged', [loc.lat, loc.lng])
+        this.geocode()
+      }
     },
     setMarker (evt) {
       // sets marker position from map click event
       let loc = evt.latlng
-      this.markerLocation = loc
-      this.$emit('locationChanged', [loc.lat, loc.lng])
-      this.markerVisible = true
-      this.geocode()
+      if(loc) {
+        this.markerLocation = loc
+        this.$emit('locationChanged', [loc.lat, loc.lng])
+        this.markerVisible = true
+        this.geocode()
+      }
     },
     geocode () {
       // retrieve reverse geocoding information for markerLocation
+      if(!this.markerLocation)
+        return
+
       let config = {
         params: {
           language: 'en',
@@ -120,6 +128,7 @@ export default {
           // todo: check address_components?
           const location = result.data.results[0]
           this.address = location.formatted_address
+          this.$emit('addressChanged', this.address)
         } else {
           //console.debug('NOT FOUND!', result)
           this.address = 'Unknown location'

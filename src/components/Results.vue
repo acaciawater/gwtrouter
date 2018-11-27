@@ -5,7 +5,7 @@
             <tr>
                 <th>Indicator</th>
                 <th>Risk</th>
-                <th>Value</th>
+                <!-- <th>Value</th> -->
                 <th>Reason</th>
             </tr>
         </thead>
@@ -15,15 +15,22 @@
             :source="source"
             :position="position"
             :key="index+1"
+            v-show="source.selected"
             >
         </Indicator>
         </tbody>
     </table>
+    <ul>
+      <li v-for="(comment,index) in comments" :key="index+1">
+        {{comment}}
+      </li>
+    </ul>
 </div>
 </template>
 
 <script>
 import Indicator from '@/components/Indicator.vue'
+import luChange from '@/assets/luchange.json'
 
 export default {
   name: 'Results',
@@ -33,7 +40,8 @@ export default {
   props: ['position', 'survey'],
   data () {
     return {
-      indicators: []
+      indicators: [],
+      comments: [] // comments at end of indicator list
     }
   },
   watch: {
@@ -53,6 +61,7 @@ export default {
 
     updateResults(survey, options) {
       //console.log("Updating", survey, options)
+      this.comments = []
       let selected = this.selectIndicators(survey.data)
       console.log("selected indicators:", selected)
       this.indicators.forEach(indicator => {
@@ -68,8 +77,16 @@ export default {
           return response.data
         })
     },
+
+    landuseChange(oldLanduse, newLanduse, type) {
+      let impactMatrix = luChange[type]
+      let index = luChange.Columns.indexOf(newLanduse)
+      return index<0? 0 : impactMatrix[oldLanduse][index]
+    },
+
     selectIndicators(data) {
       // select indicators for survey
+      console.log(data)
       let indicators = new Set()
       if(data.usegw==="yes") {
         console.log('Groundwater')
@@ -96,6 +113,9 @@ export default {
             indicators.add("Fluoride")
           }
         }
+        if(data.shallow_deep==="Shallow") {
+          
+        }
       }
       if(data.generates_waste==="yes") {
         console.log('Waste')
@@ -106,12 +126,24 @@ export default {
         indicators.add("Population density upstream") // not yet available?
         indicators.add("Return flow ratio")
       }
-      if(data.landuse==="yes") {
-        // add test for recharge reduction
-        console.log('Land use change')
-        indicators.add("Recharge")
-        indicators.add("Groundwater stress")
-        indicators.add("Downstream vulnerable") // not available?
+      if(data.landcover==="yes") {
+        console.log('Landuse')
+        let lu1 = data.landuse_now
+        let lu2 = data.landuse_future
+        console.log(lu1, lu2)
+        let effect = this.landuseChange(lu1, lu2, "Quantity")
+        console.log("Recharge:", effect)
+        if(effect) {
+          indicators.add("Recharge")
+          indicators.add("Groundwater stress")
+          this.comments.push("Replenishment of groundwater resources is expected to decrease as a result of the planned change in land cover. This risk can be mitigated by implementing managed aquifer recharge measures")
+        }
+        effect = this.landuseChange(lu1, lu2, "Quality")
+        console.log("Quality:", effect)
+        if(effect) {
+          indicators.add("Groundwater vulnerability")
+          this.comments.push("Surface water quality is expected to impacted as a result of the planned change in land cover. This can have a negative impact on groundwater quality, especially in areas where the groundwater is vulnerable (see groundwater vulnerability indicator")
+        }
       }
       return indicators
     }
@@ -120,5 +152,5 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
 </style>
