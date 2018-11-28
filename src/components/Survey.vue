@@ -21,11 +21,8 @@
       </b-col>
     </b-row>
 
-    <b-modal id="myModal" ref="myModal">
+    <b-modal id="myModal" ref="myModal" :title="popup.title" ok-only="true" ok-variant="info" ok-title="Close">
       <div>
-        <h1>
-          {{popup.title}}
-        </h1>
         <p v-html="popup.content">
         </p>
       </div>
