@@ -1,8 +1,10 @@
 <template>
-  <b-list-group-item button v-on:click='layer.visible=!layer.visible'>
-    <v-icon class='left' name='eye' v-show='layer.visible' />
-    <span class='name'>{{layer.name}}</span>
-    <a href='#'><v-icon class='right' name='ellipsis-h' /></a>
+  <b-list-group-item button v-on:click="layer.visible=!layer.visible">
+    <v-icon class="left" name="eye" v-show="layer.visible"/>
+    <span class="name">{{layer.name}}</span>
+    <a href="#">
+      <v-icon class="right" name="ellipsis-h"/>
+    </a>
   </b-list-group-item>
 </template>
 

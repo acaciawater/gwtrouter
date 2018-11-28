@@ -1,28 +1,54 @@
 <template>
-   <b-container class="h-100">
-      <div class="row justify-content-center align-items-center h-100">
-        <b-form @submit.prevent="obtain">
-          <b-form-group>
-            <input class="form-control form-control-lg" id="username" required v-model="username" type="text" placeholder="username"/>
-          </b-form-group>
-          <b-form-group>
-            <b-input-group>
-              <template v-if="passwordVisible">
-                <b-input class="form-control form-control-lg" id="password" required v-model="password" type="text" placeholder="password"/>
-                <span title="Hide password" v-on:click="togglePasswordVisibility"> <v-icon id="eye" name="eye-slash" scale="1.5"/></span>
-              </template>
-              <template v-else>
-                <b-input class="form-control form-control-lg" id="password" required v-model="password" type="password" placeholder="password" autocomplete="on"/>
-                <span title="Show password" v-on:click="togglePasswordVisibility"> <v-icon id="eye" name="eye" scale="1.5"/></span>
-              </template>
-            </b-input-group>
-          </b-form-group>
-          <b-form-group>
-            <b-button class="btn btn-info btn-lg btn-block" type="submit">Login</b-button>
-          </b-form-group>
-        </b-form>
-      </div>
-   </b-container>
+  <b-container class="h-100">
+    <div class="row justify-content-center align-items-center h-100">
+      <b-form @submit.prevent="obtain">
+        <b-form-group>
+          <input
+            class="form-control form-control-lg"
+            id="username"
+            required
+            v-model="username"
+            type="text"
+            placeholder="username"
+          >
+        </b-form-group>
+        <b-form-group>
+          <b-input-group>
+            <template v-if="passwordVisible">
+              <b-input
+                class="form-control form-control-lg"
+                id="password"
+                required
+                v-model="password"
+                type="text"
+                placeholder="password"
+              />
+              <span title="Hide password" v-on:click="togglePasswordVisibility">
+                <v-icon id="eye" name="eye-slash" scale="1.5"/>
+              </span>
+            </template>
+            <template v-else>
+              <b-input
+                class="form-control form-control-lg"
+                id="password"
+                required
+                v-model="password"
+                type="password"
+                placeholder="password"
+                autocomplete="on"
+              />
+              <span title="Show password" v-on:click="togglePasswordVisibility">
+                <v-icon id="eye" name="eye" scale="1.5"/>
+              </span>
+            </template>
+          </b-input-group>
+        </b-form-group>
+        <b-form-group>
+          <b-button class="btn btn-info btn-lg btn-block" type="submit">Login</b-button>
+        </b-form-group>
+      </b-form>
+    </div>
+  </b-container>
 </template>
 
 <script>

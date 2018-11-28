@@ -25,7 +25,7 @@ export default {
   },
 
   watch: {
-    source: function(source) {
+    source: function (source) {
       this.inspect(this.position)
     },
 
@@ -37,9 +37,10 @@ export default {
   },
 
   methods: {
-    clicked(evt) {
-      if(this.popup)
+    clicked (evt) {
+      if (this.popup) {
         this.popup(this)
+      }
     },
     clear () {
       this.value = ''
@@ -57,11 +58,10 @@ export default {
       }
       let lat = 0
       let lon = 0
-      if(Array.isArray(latlng)) {
+      if (Array.isArray(latlng)) {
         lat = latlng[0]
         lon = latlng[1]
-      }
-      else {
+      } else {
         lat = latlng.lat
         lon = latlng.lng
       }
@@ -90,9 +90,7 @@ export default {
               vm.reason = 'Error: ' + err
               vm.context = 'table-danger'
             } else if ('ServiceExceptionReport' in result) {
-              let errors = result['ServiceExceptionReport'][
-                'ServiceException'
-              ].map(x => x._)
+              let errors = result['ServiceExceptionReport']['ServiceException'].map(x => x._)
               console.log(errors)
               vm.reason = 'Error: ' + errors.join(',')
               vm.context = 'table-danger'
@@ -101,11 +99,11 @@ export default {
               let layers = result['GetFeatureInfoResponse']['Layer']
               let attr = layers[0].Attribute[0].$
               const value = attr.value
-              if (value == 'no data') {
+              if (value === 'no data') {
                 vm.rish = 'unknown'
                 vm.context = 'table-warning'
                 vm.reason = 'Indicator cannot be evaluated at this location.'
-                if(vm.source.name==="Groundwater stress") {
+                if (vm.source.name === 'Groundwater stress') {
                   vm.reason += '\nRecharge can be used as a proxy for groundwater stress'
                 }
               } else {
