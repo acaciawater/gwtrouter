@@ -17,11 +17,11 @@
         <survey v-show="!ready" :survey="survey"></survey>
       </b-col>
       <b-col cols="8">
-        <Map class="h-100" @locationChanged="onLocationChanged" @addressChanged="onAddressChanged"></Map>
+        <Map class="h-100" :markerLocation="location" @locationChanged="onLocationChanged" @addressChanged="onAddressChanged"></Map>
       </b-col>
     </b-row>
 
-    <b-modal id="myModal" ref="myModal" :title="popup.title" ok-only=true ok-variant="info" ok-title="Close">
+    <b-modal id="myModal" ref="myModal" :title="popup.title" ok-variant="info" ok-title="Close">
       <div>
         <p v-html="popup.content">
         </p>
@@ -50,10 +50,6 @@ JsonObject.metaData.addProperty("question", "popup:text");
 
 let model = new Model(blankSurvey);
 
-let surveyData = localStorage.getItem("survey");
-if (surveyData) {
-  model.data = JSON.parse(surveyData).survey;
-}
 
 export default {
   name: "MySurvey",
@@ -67,7 +63,7 @@ export default {
   data() {
     return {
       survey: model,
-      location: [0, 0],
+      location: L.latLng(20,20),
       ready: false,
       popup: {
         title: "Popup title",
@@ -108,7 +104,7 @@ export default {
         project: survey.project_name,
         location: {
           type: "Point",
-          coordinates: this.location
+          coordinates: [this.location.lat, this.location.lng]
         },
         survey: survey
       };
@@ -136,31 +132,49 @@ export default {
   mounted() {
     let vm = this;
 
+    let surveyData = localStorage.getItem("survey");
+    if (surveyData) {
+      let surveyObject = JSON.parse(surveyData)
+      model.data = surveyObject.survey;
+      if(surveyObject.location.coordinates[0]) {
+        console.log('Setting location', surveyObject.location)
+        this.location = L.latLng(surveyObject.location.coordinates)
+      }
+    }
+
     model.onValueChanged.add((sender, options) => {
       this.$refs.result.updateResults(sender, options);
     });
 
     model.onComplete.add(result => {
-      this.saveResult(result); // TODO: check if saving succeeded
-      this.survey.clear(false, false);
-      this.ready = true;
+      try {
+        this.saveResult(result); // TODO: check if saving succeeded
+      }
+      finally {
+        this.survey.clear(false, true);
+        this.ready = true;
+      }
     });
 
     model.onAfterRenderQuestion.add(function(survey, options) {
       if (options) {
         let question = options.question;
-        if (question.popup) {
-          let btn = document.createElement("button");
-          btn.className = "infobutton";
-          btn.setAttribute("type", "button");
-          btn.onclick = function() {
-            vm.popup = popupContent[question.name]
-            vm.showModal();
-          };
-          btn.innerHTML = "info";
           const anchor = options.htmlElement.querySelector("h5>span>span");
-          anchor.appendChild(btn);
-        }
+          if (question.popup) {
+            let existingElement = anchor.querySelector('.infobutton')
+            console.log(existingElement)
+            if(!existingElement) {
+              let btn = document.createElement("button");
+              btn.className = "infobutton";
+              btn.setAttribute("type", "button");
+              btn.onclick = function() {
+                vm.popup = popupContent[question.name]
+                vm.showModal();
+              };
+              btn.innerHTML = "info";
+              anchor.appendChild(btn);
+            }
+          }
       }
     });
   }

@@ -1,5 +1,5 @@
 <template>
-    <tr v-bind:class="source.selected?context:'table-light text-muted'">
+    <tr v-bind:class="source.selected?context:'table-light text-muted'" @click="clicked">
       <!-- <td><span><v-icon color="rgb(58, 131, 107)" name="info-circle"/>{{source.name}}</span></td> -->
       <td>{{source.name}}</td>
       <td>{{risk}}</td>
@@ -13,7 +13,7 @@ import xml2js from 'xml2js'
 
 export default {
   name: 'Indicator',
-  props: ['source', 'position'],
+  props: ['source', 'position', 'popup'],
 
   data () {
     return {
@@ -37,6 +37,10 @@ export default {
   },
 
   methods: {
+    clicked(evt) {
+      if(this.popup)
+        this.popup(this)
+    },
     clear () {
       this.value = ''
       this.risk = ''
@@ -127,5 +131,8 @@ export default {
 .info {
   color: blue;
 
+}
+tr {
+  cursor: pointer;
 }
 </style>

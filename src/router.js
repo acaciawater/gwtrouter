@@ -9,8 +9,8 @@ import Results from '@/components/Results.vue'
 Vue.use(Router)
 
 export const router = new Router({
-  // mode: 'hash',
-  mode: 'history',
+  mode: 'hash',
+  // mode: 'history',
   base: process.env.BASE_URL,
   routes: [
     {

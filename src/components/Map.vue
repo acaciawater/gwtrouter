@@ -1,7 +1,7 @@
 <template>
     <div class="h-100">
       <l-map style="height: 100%" ref='map' :zoom='zoom' :minZoom=2 :center='center' @mousemove="setCurrent" @click="setMarker">
-        <l-marker :visible='markerVisible' :draggable='true' :lat-lng.sync='markerLocation' @dragend="moveMarker"/>
+        <l-marker :visible='true' :draggable='true' :lat-lng.sync='markerLocation' @dragend="moveMarker"/>
       </l-map>
       <!-- {{address}} -->
     </div>
@@ -18,13 +18,12 @@ import secrets from '@/assets/secrets.json'
 export default {
   name: 'Map',
   components: { LMap, LMarker },
-  //props: ['markerVisible', 'markerLocation', 'address'],
+  props: ['markerLocation'],
+
   data () {
     return {
       zoom: 3,
       center: L.latLng(20, 20),
-      markerLocation: L.latLng(52.02136560574015, 4.7101521555446055),
-      markerVisible: false,
       address: 'Click on the map to set the project location',
       layers: jsonData
     }
@@ -34,6 +33,10 @@ export default {
     let id = 0
     let vm = this
     let map = vm.$refs.map.mapObject
+
+    if (!this.markerLocation)
+        this.markerLocation = L.latLng(20,20)//(52.02136560574015, 4.7101521555446055)
+
     // console.log('adding layers', vm)
     vm.layers.forEach(layer => {
       layer.id = ++id // add autoincremented id to layer.
@@ -105,7 +108,6 @@ export default {
       if(loc) {
         this.markerLocation = loc
         this.$emit('locationChanged', [loc.lat, loc.lng])
-        this.markerVisible = true
         this.geocode()
       }
     },

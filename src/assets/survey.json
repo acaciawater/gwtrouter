@@ -13,8 +13,9 @@
       {
        "type": "text",
        "name": "address",
-       "title": "Click on the map to set the project location",
+       "title": "Project location",
        "popup": "yes",
+       "placeHolder": "Click on the map to set the location",
        "isRequired": true,
        "readOnly": true
       },

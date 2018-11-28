@@ -16,6 +16,7 @@
             :position="position"
             :key="index+1"
             v-show="source.selected"
+            :popup="showModal"
             >
         </Indicator>
         </tbody>
@@ -25,7 +26,12 @@
         {{comment}}
       </li>
     </ul>
-</div>
+    <b-modal id="modalPopup" ref="modalPopup" :title="popup.title" ok-variant="info" ok-title="Close">
+      <div>
+        <p v-html="popup.content"></p>
+      </div>
+    </b-modal>
+  </div>
 </template>
 
 <script>
@@ -41,7 +47,8 @@ export default {
   data () {
     return {
       indicators: [],
-      comments: [] // comments at end of indicator list
+      comments: [], // comments at end of indicator list
+      popup: {title: "Title", content: "Content"}
     }
   },
   watch: {
@@ -58,6 +65,18 @@ export default {
   },
 
   methods: {
+
+    showModal(indicator) {
+      this.popup.title = indicator.source.name
+      this.popup.content = "<p>Loading...</p>"
+      this.$refs.modalPopup.show();
+      this.$http.get(indicator.source.info).then(response => {
+        this.popup.content = response.data
+      })
+      .catch(err => {
+        this.popup.content = err
+      })
+    },
 
     updateResults(survey, options) {
       //console.log("Updating", survey, options)
