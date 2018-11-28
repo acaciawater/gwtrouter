@@ -51,9 +51,20 @@ export default {
     inspect (latlng) {
       // get pixel value and calculate risk class
 
-      // console.log('INSPECT', this.source.layer, latlng)
-      const lat = latlng[0]
-      const lon = latlng[1]
+      if (!latlng) {
+        this.clear()
+        return
+      }
+      let lat = 0
+      let lon = 0
+      if(Array.isArray(latlng)) {
+        lat = latlng[0]
+        lon = latlng[1]
+      }
+      else {
+        lat = latlng.lat
+        lon = latlng.lng
+      }
       const config = {
         service: 'WMS',
         request: 'GetFeatureInfo',
