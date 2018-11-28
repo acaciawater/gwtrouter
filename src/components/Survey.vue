@@ -38,6 +38,8 @@ import "survey-vue/survey.css";
 import blankSurvey from "@/assets/survey.json";
 
 let popupContent = {
+  address: {title: "Water Risk Map", content: require("html-loader!@/assets/html/riskmap.html")},
+  shallow_deep: {title: "Shallow or deep?", content: require("html-loader!@/assets/html/shallowdeep.html")},
   landcover: {title: "Land use", content: require("html-loader!@/assets/html/landuse.html")},
   usegw: {title: "Groundwater use", content: require("html-loader!@/assets/html/groundwater.html")},
   generates_waste: {title: "Waste", content: require("html-loader!@/assets/html/waste.html")},
@@ -149,7 +151,7 @@ export default {
         let question = options.question;
         if (question.popup) {
           let btn = document.createElement("button");
-          btn.className = "btn infobutton";
+          btn.className = "infobutton";
           btn.setAttribute("type", "button");
           btn.onclick = function() {
             vm.popup = popupContent[question.name]

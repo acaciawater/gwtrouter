@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <div id="nav">
+    <!-- <div id="nav">
       <router-link title="Home" class="navitem" to="/"><v-icon name="home" scale="2"/></router-link>
       <router-link title="Questionnaire" class="navitem" to="/survey"><v-icon name="poll-h" scale="2"/></router-link>
       <router-link title="Map" class="navitem" to="/map"><v-icon name="map" scale="2"/></router-link>
       <router-link title="Report" class="navitem" to="/result"><v-icon name="file-alt" scale="2"/></router-link>
       <router-link title="Information" class="navitem" to="/about"><v-icon name="info-circle" scale="2"/></router-link>
-    </div>
+    </div> -->
     <router-view/>
   </div>
 </template>

@@ -13,7 +13,8 @@
       {
        "type": "text",
        "name": "address",
-       "title": "Enter the project location",
+       "title": "Click on the map to set the project location",
+       "popup": "yes",
        "isRequired": true,
        "readOnly": true
       },
@@ -186,6 +187,7 @@
        "name": "shallow_deep",
        "visibleIf": "{watersector} <> \"Drinking\"",
        "title": "Shallow or deep groundwater?",
+       "popup": "yes",
        "defaultValue": "Deep",
        "choices": [
         "Shallow",
