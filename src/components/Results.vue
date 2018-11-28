@@ -43,7 +43,7 @@ export default {
   components: {
     Indicator
   },
-  props: ['position', 'survey'],
+  props: ['survey','position'],
   data () {
     return {
       indicators: [],
@@ -54,7 +54,7 @@ export default {
   watch: {
     survey: function(oldSurvey, newSurvey) {
         this.updateResults(newSurvey)
-    }
+    },
   },
 
   mounted () {
@@ -87,6 +87,7 @@ export default {
         indicator.selected = selected.has(indicator.name)
       })
       console.log("Indicators: ", this.indicators)
+      this.$forceUpdate()
     },
 
     async getIndicators (url = '/api/v1/indicator/', name = undefined) {

@@ -1,13 +1,11 @@
 <template>
   <b-container fluid id="survey" class="h-100">
     <div id="nav">
-      <li title="Questionnaire" class="navitem" @click="ready=false">
+      <router-link title="Home" class="navitem" to="/"><v-icon name="home" scale="2"/></router-link>
+      <li title="Questions" class="navitem" @click="ready=false">
         <v-icon name="poll-h" scale="2"/>
       </li>
-      <li title="Map" class="navitem">
-        <v-icon name="map" scale="2"/>
-      </li>
-      <li title="Report" class="navitem" @click="ready=true">
+      <li title="Results" class="navitem" @click="ready=true">
         <v-icon name="file-alt" scale="2"/>
       </li>
     </div>
@@ -37,6 +35,7 @@ import Results from "@/components/Results.vue";
 import "survey-vue/survey.css";
 import blankSurvey from "@/assets/survey.json";
 
+// TODO: load from rat server
 let popupContent = {
   address: {title: "Water Risk Map", content: require("html-loader!@/assets/html/riskmap.html")},
   shallow_deep: {title: "Shallow or deep?", content: require("html-loader!@/assets/html/shallowdeep.html")},
@@ -49,7 +48,6 @@ let popupContent = {
 JsonObject.metaData.addProperty("question", "popup:text");
 
 let model = new Model(blankSurvey);
-
 
 export default {
   name: "MySurvey",
@@ -99,15 +97,23 @@ export default {
     },
 
     saveResult(result) {
+
+      if(!this.location)
+        return
+
       let survey = result.data;
+      let lat = this.location.lat
+      let lng = this.location.lng
+      this.location = null
       let data = {
         project: survey.project_name,
         location: {
           type: "Point",
-          coordinates: [this.location.lat, this.location.lng]
+          coordinates: [lng, lat]
         },
         survey: survey
       };
+      // console.log(data)
       localStorage.setItem("survey", JSON.stringify(data));
 
       let token = sessionStorage.getItem("token");
@@ -126,6 +132,7 @@ export default {
           }
           console.error(error.response.statusText, errormsg);
         });
+      this.location = L.latLng(lat,lng)
     }
   },
 
@@ -143,7 +150,10 @@ export default {
     }
 
     model.onValueChanged.add((sender, options) => {
-      this.$refs.result.updateResults(sender, options);
+      let result = this.$refs.result
+      if(result) {
+        result.updateResults(sender, options);
+      }
     });
 
     model.onComplete.add(result => {
@@ -162,7 +172,7 @@ export default {
           const anchor = options.htmlElement.querySelector("h5>span>span");
           if (question.popup) {
             let existingElement = anchor.querySelector('.infobutton')
-            console.log(existingElement)
+            //console.log(existingElement)
             if(!existingElement) {
               let btn = document.createElement("button");
               btn.className = "infobutton";
@@ -216,8 +226,7 @@ export default {
   color: #ffffff;
 }
 
-.modal,
 .modal-dialog {
-  max-width: 60% !important;
+  max-width: 40% !important;
 }
 </style>
