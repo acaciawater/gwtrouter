@@ -1,32 +1,35 @@
 <template>
-<div>
+  <div>
     <table class="table">
-        <thead>
-            <tr>
-                <th>Indicator</th>
-                <th>Risk</th>
-                <!-- <th>Value</th> -->
-                <th>Reason</th>
-            </tr>
-        </thead>
-        <tbody>
+      <thead>
+        <tr>
+          <th>Indicator</th>
+          <th>Risk</th>
+          <!-- <th>Value</th> -->
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
         <Indicator
-            v-for="(source,index) in indicators"
-            :source="source"
-            :position="position"
-            :key="index+1"
-            v-show="source.selected"
-            :popup="showModal"
-            >
-        </Indicator>
-        </tbody>
+          v-for="(source,index) in indicators"
+          :source="source"
+          :position="position"
+          :key="index+1"
+          v-show="source.selected"
+          :popup="showModal"
+        ></Indicator>
+      </tbody>
     </table>
     <ul>
-      <li v-for="(comment,index) in comments" :key="index+1">
-        {{comment}}
-      </li>
+      <li v-for="(comment,index) in comments" :key="index+1">{{comment}}</li>
     </ul>
-    <b-modal id="modalPopup" ref="modalPopup" :title="popup.title" ok-variant="info" ok-title="Close">
+    <b-modal
+      id="modalPopup"
+      ref="modalPopup"
+      :title="popup.title"
+      ok-variant="info"
+      ok-title="Close"
+    >
       <div>
         <p v-html="popup.content"></p>
       </div>
@@ -131,13 +134,22 @@ export default {
             indicators.add('Fluoride')
           }
         }
-        if (data.shallow_deep === 'Shallow') {
-
+        if (data.shallow_deep !== 'Deep') {
+          this.comments.push('Shallow groundwater is generally more vulnerable to contamination.')
+        }
+        if (data.shallow_deep !== 'Shallow') {
+          this.comments.push('Deep groundwater is usually very old and is replenished very slowly. This means that there is a higher risk that groundwater use is non-sustainable. In addition, pumping costs from deep wells can be substantial.')
+        }
+        if (data.urbanrural === 'Urban') {
+          this.comments.push('The wells are planned in an urban area. The risk of groundwater contamination caused by human activities is relatively high in urban areas, so it is advised to thoroughly check groundwater quality before well installation.')
         }
       }
       if (data.generates_waste === 'yes') {
         console.log('Waste')
         indicators.add('Groundwater vulnerability')
+        if (data.treatment_plan === 'no') {
+          this.comments.push('Any untreated waste has a risk of contaminating groundwater resources. Therefore, it is crucial that projects have a sound waste (water) treatment or disposal plan.')
+        }
       }
       if (data.surface === 'yes') {
         console.log('Surface water')
