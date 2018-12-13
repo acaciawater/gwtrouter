@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Open Streetmap",
+        "type": "tms",
+        "url": "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
+        "attribution": "&copy; <a href=\"https://osm.org/copyright\">OpenStreetMap</a> contributors",
+        "visible": true,
+        "minZoom": 2,
+        "maxZoom": 20
+    },
+    {
+        "name": "Natural Earth",
+        "type": "wms",
+        "url": "https://gis.acaciadata.com/?map=/project/gwtool/tool.qgs",
+        "layer": "NaturalEarth",
+        "opacity": 0.5,
+        "maxZoom": 6,
+        "visible": true
+    }
+]

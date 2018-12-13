@@ -1,0 +1,21 @@
+[
+    {
+        "name": "Open Streetmap",
+        "type": "tms",
+        "url": "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
+        "attribution": "&copy; <a href=\"https://osm.org/copyright\">OpenStreetMap</a> contributors",
+        "visible": false,
+        "minZoom": 2,
+        "maxZoom": 20
+    },
+    {
+        "name": "Water risk",
+        "type": "wms",
+        "url": "https://gis.acaciadata.com/?map=/project/gwtool/tool2.qgs",
+        "layer": "Main",
+        "opacity": 1.0,
+        "minZoom": 2,
+        "maxZoom": 20,
+        "visible": true
+    }
+]
