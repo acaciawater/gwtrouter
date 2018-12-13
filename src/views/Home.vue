@@ -8,13 +8,13 @@
     <b-container class="home">
       <b-row>
         <b-col>
-          <b-img rounded left fluid :src="require('../assets/img/GroundwaterIrrigation.png')" alt="Thumbnail"/>
+          <b-img rounded left fluid :src="require('@/assets/img/GroundwaterIrrigation.png')" alt="Thumbnail"/>
         </b-col>
         <b-col>
           <b-img rounded center fluid :src="require('@/assets/img/RuralWaterSupply.png')" alt="Thumbnail"/>
         </b-col>
         <b-col>
-          <b-img rounded right fluid :src="require('../assets/img/SandDam.png')" alt="Thumbnail"/>
+          <b-img rounded right fluid :src="require('@/assets/img/SandDam.png')" alt="Thumbnail"/>
         </b-col>
       </b-row>
       <hr/>
@@ -26,7 +26,7 @@
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
+import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
   name: 'home',
