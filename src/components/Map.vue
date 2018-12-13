@@ -25,37 +25,31 @@ import querystring from 'querystring'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import { LMap, LMarker } from 'vue2-leaflet'
-import jsonData from '@/assets/surveylayers.json'
+// import jsonData from '@/assets/surveylayers.json'
 import secrets from '@/assets/secrets.json'
 
 export default {
   name: 'Map',
   components: { LMap, LMarker },
-  props: ['markerLocation'],
+  props: ['markerLocation', 'layers'],
 
   data () {
     return {
       zoom: 3,
       center: L.latLng(20, 20),
-      address: 'Click on the map to set the project location',
-      layers: jsonData
+      address: 'Click on the map to set the project location'
+      // layers: jsonData
+    }
+  },
+  watch: {
+    'layers': function (current, newLayers) {
+      this.setLayers(newLayers)
     }
   },
 
   mounted () {
-    let id = 0
-    let vm = this
-    let map = vm.$refs.map.mapObject
-
     if (!this.markerLocation) this.markerLocation = L.latLng(20, 20) // (52.02136560574015, 4.7101521555446055)
-
-    // console.log('adding layers', vm)
-    vm.layers.forEach(layer => {
-      layer.id = ++id // add autoincremented id to layer.
-      if (layer.visible) {
-        vm.addLayer(layer, map)
-      }
-    })
+    this.setLayers(this.layers)
   },
 
   methods: {
@@ -106,6 +100,27 @@ export default {
           })
       }
     },
+
+    removeLayers (map) {
+      // remove all layers
+      map.eachLayer(function (layer) {
+        map.removeLayer(layer)
+      })
+    },
+
+    setLayers (layers) {
+      let map = this.$refs.map.mapObject
+
+      this.removeLayers(map)
+      let id = 0
+      layers.forEach(layer => {
+        layer.id = ++id // add autoincremented id to layer.
+        if (layer.visible) {
+          this.addLayer(layer, map)
+        }
+      })
+    },
+
     setCurrent (evt) {
       this.currentLocation = evt.latlng
     },

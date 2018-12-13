@@ -20,6 +20,7 @@
         <Map
           class="h-100"
           :markerLocation="location"
+          :layers="surveyLayers"
           @locationChanged="onLocationChanged"
           @addressChanged="onAddressChanged"
         ></Map>
@@ -41,6 +42,8 @@ import Results from '@/components/Results.vue'
 import 'survey-vue/survey.css'
 import blankSurvey from '@/assets/survey.json'
 import L from 'leaflet'
+import surveyLayerConfig from '@/assets/surveylayers.json'
+import resultLayerConfig from '@/assets/resultlayers.json'
 
 let popupContent = {
   address: { title: 'Water Risk Map', content: '', url: 'info/riskmap.html' },
@@ -68,6 +71,8 @@ export default {
     return {
       survey: model,
       location: L.latLng(20, 20),
+      surveyLayers: surveyLayerConfig,
+      resultLayers: resultLayerConfig,
       ready: false,
       popup: {
         title: 'Popup title',
