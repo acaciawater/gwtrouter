@@ -68,7 +68,7 @@
        "type": "dropdown",
        "name": "bugdet",
        "title": "What is the estimated project budget (euro)?",
-       "defaultValue": "< 100,000",
+       "defaultValue": "100,000 - 500,000",
        "choices": [
         "< 100,000",
         "100,000 - 500,000",
@@ -76,7 +76,7 @@
        ]
       }
      ],
-     "title": "Please enter general information about the project under evaluation"
+     "title": "General information"
     },
     {
      "name": "MainPage",
@@ -134,7 +134,9 @@
         "no"
        ]
       }
-     ]
+     ],
+     "visibleIf": "{bugdet} <> \"< 100,000\"",
+     "title": "Main characteristics"
     },
     {
      "name": "Groundwater",
@@ -172,9 +174,9 @@
       },
       {
        "type": "radiogroup",
-       "name": "drinkingwater_beneficiaries",
+       "name": "urbanrural",
        "visibleIf": "{watersector} = \"Drinking\" or \n{watersector} = \"Irrigation\" or \n{watersector} = \"Livestock\" or\n({watersector} = \"Industry\" and {industry_type} = \"Food\")",
-       "title": "Is the drinking water meant for urban or rural areas?",
+       "title": "Is the water used in urban or rural areas?",
        "defaultValue": "Urban",
        "isRequired": true,
        "choices": [
@@ -200,7 +202,7 @@
        ]
       }
      ],
-     "visibleIf": "{usegw} = \"yes\"",
+     "visibleIf": "{usegw} = \"yes\" and {bugdet} <> \"< 100,000\"",
      "title": "Groundwater use"
     },
     {
@@ -255,7 +257,7 @@
        ]
       }
      ],
-     "visibleIf": "{generates_waste} = \"yes\"",
+     "visibleIf": "{generates_waste} = \"yes\" and {bugdet} <> \"< 100,000\"",
      "title": "Waste disposal"
     },
     {
@@ -304,7 +306,7 @@
        ]
       }
      ],
-     "visibleIf": "{landcover} = \"yes\"",
+     "visibleIf": "{landcover} = \"yes\" and {bugdet} <> \"< 100,000\"",
      "title": "Land use or land cover change"
     }
    ],
