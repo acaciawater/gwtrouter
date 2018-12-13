@@ -25,7 +25,7 @@ import querystring from 'querystring'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import { LMap, LMarker } from 'vue2-leaflet'
-import jsonData from '@/assets/layers.json'
+import jsonData from '@/assets/surveylayers.json'
 import secrets from '@/assets/secrets.json'
 
 export default {
@@ -142,6 +142,7 @@ export default {
         }
       }
       this.address = 'Locating...'
+      this.$emit('addressChanged', this.address)
       this.$http
         .get('https://maps.googleapis.com/maps/api/geocode/json', config)
         .then(result => {
@@ -152,16 +153,17 @@ export default {
             this.address = location.formatted_address
             this.$emit('addressChanged', this.address)
           } else {
-            // console.debug('NOT FOUND!', result)
             this.address = 'Unknown location'
-            setTimeout(() => {
-              this.address = ''
-            }, 2000)
+            this.$emit('addressChanged', this.address)
+            // setTimeout(() => {
+            //   this.address = ''
+            // }, 2000)
           }
         })
         .catch(err => {
           console.error(err)
           this.address = ''
+          this.$emit('addressChanged', this.address)
         })
     }
   }
